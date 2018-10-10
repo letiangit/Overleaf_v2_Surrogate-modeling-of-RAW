@@ -380,6 +380,7 @@
 
 
 \begin{document}
+\begin{frontmatter}
 \input{glossary}
 %
 % paper title
@@ -479,7 +480,11 @@ networks
 \IEEEpeerreviewmaketitle
 
 \begin{abstract}
-The new medium access method proposed by IEEE~802.11ah, called \gls{raw}, aims to provide connectivity for the large-scale densely deployed \gls{iot} networks. It divide stations into different groups, and only allows stations in the same group to access the channel simultaneously, in order to significantly reduce the collision in the highly dense deployment and therefore achieve better performance (e.g., throughput, energy efficiency and latency). However, the IEEE~802.11ah standard does not specify how to group the stations, and the existing station grouping strategies only support homogeneous scenarios where all sensor stations have the same \gls{mcs} and packet size. In this paper, we present a surrogate model that can accurately predict the \gls{raw} performance under the given \gls{raw} configuration parameters for the heterogeneous networks. Different from homogeneous scenario, the heterogeneous networks have more parameters leading to an enormous design space. Therefore, the training methodology is well designed to be able to create the surrogate model with xx data points (i.e., xx\% of the whole design space). The prediction of the built surrogate model is compared against the simulation results of a huge number of data points, \textcolor{red}{it shows that the trained surrogate model can accurately predict \gls{raw} performance with a relative error less than 7\% and 10\% for 95\% and 98\% of the \gls{raw} configurations respectively.} 
+The new medium access method proposed by IEEE~802.11ah, called \gls{raw}, aims to provide connectivity for large-scale densely deployed \gls{iot} networks. It divides stations into different groups, and only allows stations in the same group to access the channel simultaneously, in order to significantly reduce collision in the highly dense deployments and therefore achieve better performance (e.g., throughput, energy efficiency and latency). However, the IEEE~802.11ah standard does not specify how to group the stations, and the existing station grouping strategies only support homogeneous scenarios where all sensor stations have the same \gls{mcs} and packet size. A surrogate model, is an efficient mathematical model that represents the behavior of a complex system based on a limited set of labeled data point samples. 
+
+In this paper, we present a surrogate model that can accurately predict  \gls{raw} performance under a given \gls{raw} configuration parameters for the heterogeneous networks. Different from the homogeneous scenario, heterogeneous networks have more parameters leading to an enormous design space. 
+
+Therefore, the training methodology is well designed to be able to create the surrogate model with xx data points (i.e., xx\% of the whole design space). The prediction of the built surrogate model is compared against the simulation results of a huge number of data points, \textcolor{red}{it shows that the trained surrogate model can accurately predict \gls{raw} performance with a relative error less than 7\% and 10\% for 95\% and 98\% of the \gls{raw} configurations respectively.} 
 %Moreover, the model can be applied for \gls{raw} optimization in real time. }
 
 
@@ -489,6 +494,9 @@ The new medium access method proposed by IEEE~802.11ah, called \gls{raw}, aims t
 IEEE~802.11ah, RAW, surrogate model, heterogeneous networks.
 \end{IEEEkeywords}
 
+\end{frontmatter}
+
+\glsresetall
 
 \input{input/Introduction}
 %\input{input/80211ah}
