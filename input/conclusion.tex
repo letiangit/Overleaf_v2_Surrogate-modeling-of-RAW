@@ -1,0 +1,10 @@
+\section{CONCLUSION AND FUTURE WORK \label{sec:conclusion}}
+
+\textbf{Next steps or things need to do now}
+\begin{enumerate}
+\item retrain the model, split the transmission time into packet size range [Ps, Pe] and distance range [Ds, De]. \\
+Quite complex to design the input for training, extrapolate the model, and  validate. Experiment design, the selection of range [s, e], and step size for both distance and packet size range. the step size. Output extrapolate (validation), for test scenarios that cross the two ranges [s, e], how to extrapolate the model and compare to simulation results?
+\item retrain the model, add the standard deviation of the transmission time into the input parameters, which distribution should the transmission time should follow? How to design the step size? \\
+\item Change the input parameters of the training. The input parameters [raw duration, slot number, station number] can be substituted by [slot duration, number of stations per slot]. \\
+\textcolor{red}{This approach is not feasible, obviously, for a fixed number of station per slot, the outputs(throughput)} varies as the other input parameters (for example, the station number) changes. as illustrated in figure \ref{fig:result-rd} and figure \ref{fig:result-range}. Apparently, the station number determines the maximal output the network can achieve, and should not be removed from the input parameters list. 
+\end{enumerate}

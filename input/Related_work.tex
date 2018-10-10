@@ -1,0 +1,136 @@
+\section{Related Work \label{sec:related_work}}
+
+
+As the IEEE~802.11ah standard does not specify how to configure the actual \gls{raw} grouping parameters, several studies have been conducted on the \gls{raw} performance evaluation, modeling and optimization. Raeesi et al. evaluated the \gls{raw} performance using network simulator OMNeT++, the results demonstrate that the RAW feature provide
+substantial performance (i.e., throughput, energy consumption and latency) improvements, in particular in scenarios where there are relatively high number of collisions and heavily loaded network \cite{Raeesi2014a}. Using the more realistic simulator, IEEE~802.11ah ns-3 model \cite{WNS32016}, we further evaluated the optimal \gls{raw}  configuration for a variety of network conditions, such as traffic load, number of stations, traffic distribution among stations~\cite{WoWMoM2016}. These works highlight the impact of network conditions on the optimal \gls{raw} configurations, demonstrate there is a need for \gls{RAW} performance model, which can predict performance for the given RAW parameter values (e.g., number of groups and slots, group duration, station assignment) and given the current network conditions (e.g., network topology, traffic load, station number). In addition, the \gls{raw} model should be enable to be applied in real time for \gls{raw} optimization under dynamic network conditions.
+
+
+%\subsection{\gls{raw} performance models}
+
+%In order to allow the AP to choose the optimal RAW configuration in real-time, a RAW performance model is needed. Given the current network conditions (e.g., network topology, traffic) and a set of RAW parameter values (e.g., number of groups and slots, group duration, station assignment) the model should estimate performance (e.g., in terms of throughput). 
+
+Several mathematical \gls{raw} models have been proposed to calculate  performance under specific network and traffic conditions. These models make use of different techniques, such as probability theory~\cite{Wang2015}, Markov chain~\cite{Raeesi2014a, Khorov2015b,Zheng2014, Evgeny2018, Khorov2015b, Park2014b}, and maximum likelihood estimation~\cite{Park2014b}. Some models  assume stations have infinite packet to send (i.e., saturated model)  \cite{Raeesi2014a, Zheng2014, Park2014b, Evgeny2018}. The work of \cite{Raeesi2014a, Zheng2014, Park2014b} are based on the Bianchi model \cite{bianchi2000performance}, which is a classical mathematical model of the \gls{dcf} for the legacy IEEE~802.11 networks. It utilize the Markov Chain theory, assumes network is always in the steady state and saturated mode. Raeesi \textit{et al.}  update the Bianchi model to calculate the probability of collision inside a \gls{raw} slot without take into account the finite length of the RAW slot \cite{Raeesi2014a}. Zheng \textit{et al.} extended the Bianchi model to support \gls{raw} considering both cross and non-cross slot boundary traffic, the extended model is able to calculate the throughput with any given number of stations and \gls{raw} duration~\cite{Zheng2014}. Park \textit{et al.} adopts the Bianchi model for the  joint usage of the PS-Poll and the RAW mechanisms, determines the duration of \gls{raw} group in order to achieve the maximal successful transmission probability for a given number of stations~\cite{Park2014b}. A more accurate mathematical model is recently developed by Khorov \textit{et al.} \cite{Evgeny2018}, by taking into account the non-steady state of the backoff function at the beginning of the RAW. One the contrary, \cite{Khorov2015b, Wang2015} assume each station sends one packet per \gls{raw} slot interval. By taking into account the reset of the backoff function state at the beginning of the RAW slot, Khorov \textit{et al.} presented a model to calculate the successful packet transmission probability for a certain \gls{raw} group duration~\cite{Khorov2015b}, while Wang's model mainly focus on energy consumption~\cite{Wang2015}. 
+
+The above mathematical models have two main disadvantages. First of all, these models are computationally hard. This makes it infeasible to execute them in real-time on actual \gls{ap} hardware, where at most a few milliseconds are available at the start of the beacon interval to calculate a new \gls{raw} configuration. More importantly, they assume certain types of traffic and ideal channel conditions, without communication errors, delays or capture effects. The combination of these factors make such models useful only from a theoretical point of view, to analyze the effectiveness of \gls{raw} under a variety of conditions. However, they cannot be used for real-time station grouping under dynamic and realistic traffic conditions. 
+
+Chang \textitet{et al.} made a step further, to support more diverse traffic demand \cite{Chang2018}. It use the results of two two extreme cases (i.e., with infinite traffic and with only a single packet) to find a regression-based analytical model that can accurately fits the contention success probability of any traffic patterns. However, the regression model does not take the the finite length of the RAW slot is not taken into account.
+ Recently, we proposed a new RAW performance model based on supervised surrogate modeling \cite{wowmom2018}. The model is trained on a limited set of labeled data samples from ns-3 simulation results, support realistic channel conditions, including communication errors, propagation delays and capture effects. Both \cite{Chang2018} and ~\cite{wowmom2018} only support homogeneous networks (i.e., all stations use the same MCS and average packet size). 
+
+
+Based on the proposed \gls{raw} models, \cite{Chang2018} and \cite{wowmom2018} also developed the \gls{raw} optimization algorithms.  \cite{Chang2018} presents a traffic-aware station grouping algorithm to maximize the \gls{raw} performance. However, due to the drawbacks of the model, the algorithm assumes the number of \gls{raw} groups and \gls{raw} duration are predetermined, which is actually part of the \gls{raw} optimization problem and need to be solved.
+In \cite{wowmom2018}, we present a real-time \gls{raw} optimization algorithm, called \gls{moroa}, supporting a wide range of traffic conditions and heterogeneous stations. However, since the model itself only support stations with same MCS and  packet sizes, the \gls{moroa} only allows same type of stations within a single \gls{raw} group. This limited the flexibility of the algorithm in finding an optimal RAW configuration.
+
+%Moreover, it is very fast to evaluate once trained, allowing it to be used for real-time RAW parameter optimization.
+
+
+
+
+% In addition, a traffic-aware station grouping algorithm was proposed based on the model. However, it assumes the number of \gls{raw} groups and \gls{raw} duration are predetermined, which is actually part of the \gls{raw} optimization problem and need to be solved. The \gls{taroa} algorithm ~\cite{Sensor2017,Sensys2017} can adapt the optimal \gls{raw} parameters in real-time by estimating the current traffic conditions, based solely on information available at the \gls{ap}. However, it derives the optimal number of stations to assign to a group based on saturated state simulation results. Both \cite{Chang2018} and ~\cite{Sensor2017,Sensys2017} only support homogeneous stations (i.e., all stations use the same MCS and average packet size). 
+
+% Recently, we proposed a surrogate model of \gls{raw} which are trained using realistic simulation results, and a real-time \gls{raw} optimization algorithm based on the model, called \gls{moroa}, was proposed supporting a wide range of traffic conditions and heterogeneous stations \cite{wowmom2018}. 
+% However, the model itself only support stations with same MCS and  packet sizes, which only allows same type of stations within a single \gls{raw} group, and limited the flexibility of the algorithm in finding an optimal RAW configuration.
+
+
+
+%  However, the existing analytical models are computationally expensive and unrealistic due to their assumptions.
+ 
+%  Although a surrogate \gls{raw} model is constructed in \cite{wowmom2018}, it only supports stations with the same \gls{mcs} and packet size, the lack of support on adaptive rate control and diverse packet size make it inapplicable to the realistic scenarios.
+
+
+
+%Instead of using Binary Exponential Backoff (BEB) scheme inside of \gls{raw} group, Gopinath \textitet{et al.} proposed a new backoff scheme using an appropriate integer sequences for calculating new Contention Window, and  developed an analytical model  for computing saturated throughput \cite{gopinath2018mathematical}.
+
+
+
+
+% This is not a very realistic assumption for \gls{iot} and \gls{mtc}~\cite{Khorov2015b}. Those models cannot be directly applied to an IoT network, in which each sensor generates traffic periodically. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+% models to estimate the contention success probabilities of the two extreme cases (i.e., with infinite traffic and with only a single packet), and then use the estimates of the two cases to 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \subsection{\gls{raw} optimization algorithms}
+
+% In addition to modeling \gls{raw} performance, several algorithms have been proposed to optimize \gls{raw} performance. Some of them group stations based on very simple metrics  \cite{Chang2015, Qutab-Ud-Din2015, Ogawa2013}. Chang \textit{et al.} proposed a set partitioning algorithm that assumes the (static) traffic demand of each station is known by the \gls{ap} and load balances them across groups~\cite{Chang2015}. While stations are grouped based on fully random random AIFSN  ~\cite{Ogawa2013}, or back-off timer value~\cite{Qutab-Ud-Din2015} which is unknown to the \gls{ap} in reality. They all assume the number of \gls{raw} slots and groups is predetermined.
+
+
+
+
+
+
+% allowing it to be used for real-time RAW
+% parameter optimization.
+
+% by using generic and flexible surrogate models, we present the \gls{moroa}  algorithm, which supports a wide range of traffic conditions and heterogeneous stations.
+
+
+
+
+
+% This results in significant performance improvements, especially under non-saturated conditions, which are prevalent in \gls{iot} and \gls{mtc} scenarios. 
+
+
+
+
+% However, it still has two shortcomings that can be addressed. First, it derives the optimal number of stations to assign to a group based on saturated state simulation results. Second, it only supports homogeneous stations (i.e., all stations use the same MCS and average packet size). 
+
+
+
+% Their simplicity makes it computationally feasible to deploy them in real networks. 
+
+% it is necessary to use this information in real-time, in order to optimize \gls{raw} parameters in an actual network.
+
+
+
+
+% %Several algorithms utilize \gls{raw} to mitigate hidden node collisions by splitting mutually hidden nodes into orthogonal groups~\cite{Yoon2016,Damayanti2016}%{Yoon2016,Dong2016,Damayanti2016}. 
+
+
+
+
+
+% \cite{Chang2018} 
+
+% Such set partitioning algorithms have several shortcomings. 
+
+
+% First, high channel contention exists in dense sensor network even without the presence of hidden nodes. Reducing hidden nodes can mitigate collisions to some extent, but is not sufficient. 
+
+% Second, they expect all information, such as the exact traffic intensity of each station, to be readily available at the \gls{ap} side, which in reality is not the case. Third, they assume that the number of groups and slots as well as their duration are predefined, and only the partitioning of stations among them needs to be solved. The number of groups and their duration, however, significantly influence \gls{raw} optimality~\cite{WoWMoM2016}. Finally, none of the presented algorithms take into account traffic dynamics. In a real network, the upstream traffic intensity of stations may change over time for a variety of reasons, and the algorithm should therefore adapt to these changes.
+
+% Recently, we proposed the \gls{taroa}~\cite{Sensor2017,Sensys2017}. It adapts the optimal \gls{raw} parameters in real-time by estimating the current traffic conditions, based solely on information available at the \gls{ap}. However, it still has two shortcomings that can be addressed. First, it derives the optimal number of stations to assign to a group based on saturated state simulation results. Second, it only supports homogeneous stations (i.e., all stations use the same MCS and average packet size). 
+
+% In this paper we present an improved algorithm, called \gls{moroa}, which supports a wide range of traffic conditions and heterogeneous stations, by using generic and flexible surrogate models. This results in significant performance improvements, especially under non-saturated conditions, which are prevalent in \gls{iot} and \gls{mtc} scenarios. 
+
+% %use the simulation results (since the analytic model \cite{Zheng2014} does not support capture effect) of saturated state to derive the optimal number of stations $\sigma^r_\textit{opt}$, while in most case network is not saturated. Second, it can only support homogeneous station, i.e., all station have the same MCS and packet size.
+
+
+% % In contrast to other state-of-the-art algorithms it is capable of adjusting its \gls{raw} configuration in real-time, in face of station and traffic dynamics. Furthermore, by exploiting the “more data” header field \textcolor{white}{and cross slot boundary} feature, a more accurate traffic estimation technique for IEEE 802.11ah sensor stations was proposed, which is integrated into an enhanced version of the Traffic-Adaptive \gls{raw} Optimization Algorithm, referred to as E-TAROA \cite{Sensys2017}. With more accurate traffic estimation in very dense networks with thousands of sensor stations, E-TAROA results in a significantly more optimal \gls{raw} configuration. Specifically, E-TAROA converges significantly faster and achieves up to 23\% higher throughput and 77\% lower latency than the original TAROA algorithm under high traffic loads.
+
+
+
