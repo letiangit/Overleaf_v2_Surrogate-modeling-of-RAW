@@ -208,7 +208,7 @@ Rate control algorithm                     & XXX \\
  
  
  
-\subsection{Parameters design for \gls{raw} modelling \label{subsec:para_design}}
+\subsection{Parameter design for \gls{raw} modelling \label{subsec:para_design}}
 
 %\item Input parameters (and motivation and experiments that led to this choice): minimum, maximum, step size, list of parameters, ...
 % \begin{itemize}
@@ -217,19 +217,19 @@ Rate control algorithm                     & XXX \\
 % \item RAW parameters.
 % \end{itemize}
 
-The goal is to build a surrogate model that can predict the performance of a heterogeneous 802.11ah network for the given \gls{raw} parameters values and the network conditions. Therefore, a set of parameters should be defined to represent the \gls{raw} configuration and network conditions,  and used as the input parameter of the model. Moreover, the input parameters space needs to be defined, which consists of the minimum and maximum value of each parameter, as well as a step size. As for the output parameter of the model, it should be able to represent the performance metrics (e.g., throughput, energy consumption and latency) with the given input parameters. To simplify the explanation, we focus on throughput.
+The goal is to build a surrogate model that can predict the performance of a heterogeneous 802.11ah network for the given \gls{raw} parameter values and  network conditions. Therefore, a set of parameters should be defined to represent the \gls{raw} configuration and network conditions,  and used as the input parameters of the model. Moreover, the input parameter space needs to be defined, which consists of the minimum and maximum value of each parameter, as well as a step size. As for the output parameter of the model, it should be able to represent the performance metrics (e.g., throughput, energy consumption and latency) with the given input parameters. To simplify the explanation, we focus on throughput as an output metric.
 
 
 
-\subsubsection{\gls{raw} parameters design \label{subsec:raw_para_design}}
+\subsubsection{\gls{raw} parameter design \label{subsec:raw_para_design}}
 
-As mentioned in section \ref{subsec:80211ah_raw}, the related parameters of a \gls{raw} group $r$ are, number of station assigned to the \gls{raw} groups $n_r$, duration of the \gls{raw} group $d_r$, and slot number in the \gls{raw} group $s_r$. Our previous work \cite{wowmom2018} has selected the appropriate range and step size for each \gls{raw} parameter, which leads to quite high model accuracy and only a few training data points. Therefore, in this paper, we use the same \gls{raw} parameters values. A minimum value of $60$ and maximum value of $400$ stations per group $n_r$ were deemed to cover all possible traffic conditions, $d_r$ is varied between $40960$~$\mu$s and $204800$~$\mu$s, and  $s_r$ is between 1 and 50. This results in $2.3 \times 10^7$ possible combinations, which is too high to train the model in a feasible amount of time. Thus, a good step
+As mentioned in Section \ref{subsec:80211ah_raw}, the related parameters of a \gls{raw} group $r$ are, number of station assigned to the \gls{raw} groups $n_r$, duration of the \gls{raw} group $d_r$, and slot number in the \gls{raw} group $s_r$. In our previous work \cite{wowmom2018}, we selected the appropriate range and step size for each \gls{raw} parameter, which leads to high model accuracy and only a limited number of training data points. Therefore, in this paper, we use the same \gls{raw} parameter values. A minimum value of $60$ and maximum value of $400$ stations per group $n_r$ were deemed to cover all possible traffic conditions, $d_r$ is varied between $40960$~$\mu$s and $204800$~$\mu$s, and  $s_r$ is between 1 and 50. This results in $2.3 \times 10^7$ possible combinations, which is too high to train the model in a feasible amount of time. Thus, a good step
 size for each of the three \gls{raw} parameters is chosen, leveraging the trade-off between accuracy and training speed.
 For $n_r$ and $s_r$ a step size of 5 was selected, and $s_r$ takes on values from the set $\left\{1, 5, 10, ..., 50\right\}$. As such, $25047$ combinations are generated with \gls{raw} parameters, and the total number of data points of the input space is $25047 \times m$, where $m$ represents the number of combinations from the network condition parameters.
 
 \subsubsection{Network condition and output parameter design \label{subsec:network_para_design}}
 
-As in the IEEE~802.11ah network environment, the typical setting are used for  some parameters, the remaining variables are the  packet size  $[\underline{ps}, \bar{ps}]$ and coverage range $[\underline{d}, \bar{d}]$, which leads to a variety of heterogeneous networks. It seems straightforward to use these four parameters as the input parameters of model representing the networks conditions. However, this would results in a huge input design space, significantly increases the required training data points and therefore slow the training speed. According to the training scenarios, the $\underline{d}$ and $\bar{d}$ is between 0 and 500 meters with $\underline{d} \leq \bar{d}$, the $\underline{ps}$ and $\bar{ps}$ is between 0 and 512 bytes with $\underline{ps} \leq \bar{ps}$. With step size 1, the coverage range $[\underline{d}, \bar{d}]$ and packet size range $[\underline{ps}, \bar{ps}]$ results in 125751 and 115921 combinations respectively, and $m = 1.4 \times 10^{10} $ combinations in total. Therefore, the total number of data points of the input space is $3.65 \times  10^{14}$, which is too huge. With a large step size, for instance, 100 for  the coverage ($\underline{d}, \bar{d}$) and 120 for the packet size ($\underline{ps}, \bar{ps}$), the input space still has $7.89 \times  10^{6}$ data points.
+As in the IEEE~802.11ah network environment, the typical settings are used for  some parameters (cf. Table \ref{tab:ns3 parameters}), the remaining variables are the  packet size  $[ps^-, ps^+]$ and coverage range $[d^-, d^+$, which leads to a variety of heterogeneous networks. It seems straightforward to use these four parameters as the input parameters of model representing the networks conditions. However, this would result in a huge input design space, significantly increase the required training data points and therefore slowing the training speed. According to the training scenarios, the $d^-$ and $d^+$ is between 0 and 500 meters with $d^- \leq d^+$, the $ps^-$ and $ps^+$ is between 0 and 512 bytes with $ps^- \leq ps^+$. With step size 1, the coverage range $[d^-, d^+]$ and packet size range $[ps^-, ps^+]$ results in 125751 and 115921 combinations respectively, and $m = 1.4 \times 10^{10} $ combinations in total. Therefore, the total number of data points of the input space is $3.65 \times  10^{14}$, which is too big to achieve feasible convergence. With a large step size, for instance, 100 for  the coverage ($\underline{d}, \bar{d}$) and 120 for the packet size ($\underline{ps}, \bar{ps}$), the input space still has $7.89 \times  10^{6}$ data points.
 
 
 %\textcolor{red}{todo, explain the huge space caused by the four parameters.}
@@ -248,18 +248,18 @@ As in the IEEE~802.11ah network environment, the typical setting are used for  s
 %% with raw, total, 315 * 25047 = 7889805
 
 
-As MCS (equivalent to data rate) and packet size can jointly determine the transmission time of a packet, we decide to use average packet transmission time $\hat{t}_p$ of all stations as the input parameter representing the network conditions, leveraging the trade-off between accuracy and training speed. %and packet receiving rate as the output parameter of the mode. 
+As MCS (equivalent to data rate and derived from distance) and packet size can jointly determine the transmission time of a packet, we decide to use average packet transmission time $\hat{t}_p$ of all stations as the input parameter representing network conditions, leveraging the trade-off between accuracy and training speed. %and packet receiving rate as the output parameter of the mode. 
 %The reason is detailed in the reminder of this section.
-The reason is detailed in section \ref{subsubsec:txselection}. Hereby We present the distribution of average transmission time $\hat{t}_p$ among the IEEE~80.211ah network scenarios, and define its minimum and maximum value as an input parameter of the surrogate model. Figure \ref{fig:tx-hist} depicts the 
-distribution of average transmission time $\hat{t}_p$ of the training scenarios.  This figure is derived from the simulation results of a broad range of networks which has different coverage range and packet size range. The $\underline{d}$ and $\bar{d}$ are selected from [\textit{min}:\textit{step}:\textit{max}]=[0:10:500] meters, and the $\underline{ps}$ and $\bar{ps}$ belong to  [\textit{min}:\textit{step}:\textit{max}]=[32:32:512] bytes. Therefore, the combination of coverage range and packet size range  leads to 180336 different 802.11ah networks. We calculate the average packet transmission time across all stations in each network, and count how many times a certain average transmission time is repeated among the 180336 different 802.11ah networks.
- The results in figure \ref{fig:tx-hist} shows that, the average transmission time [1200 1500] us has the most repeat number 24660,  and the average transmission time is mainly between 1000 us and 5000 us (around 90\%). Therefore,  when average transmission time is considered as an input parameter of the modeling, 1000 us and 5000 us can be used as its minimum and maximum value for the training. A step size of 250 is selected. Therefore, using average transmission time results in a design space with only $25047 \times 17 = 425799$ data points, which is much less than  \textcolor{red}{$xx$} data points caused by using $\underline{d}$, $\bar{d}$, $\underline{ps}$ and $\bar{ps}$ as input parameters to represent the network. The kriging model can interpolate the results for data points outside the input parameter space.
+The reason is detailed in Section \ref{subsubsec:txselection}. Hereby we present the distribution of average transmission time $\hat{t}_p$ among the IEEE~80.211ah network scenarios, and define its minimum and maximum value as an input parameter of the surrogate model. Figure \ref{fig:tx-hist} depicts the 
+distribution of average transmission time $\hat{t}_p$ of the training scenarios.  This figure is derived from the simulation results of a broad range of networks which have different coverage and packet size ranges. The $d^-$ and $d^+$ parameters are selected from [\textit{min}:\textit{step}:\textit{max}]=[0:10:500] meters, and the $\underline{ps}$ and $\bar{ps}$ belong to  [\textit{min}:\textit{step}:\textit{max}]=[32:32:512] bytes. Therefore, the combination of coverage range and packet size range  leads to 180336 different 802.11ah networks. We calculate the average packet transmission time across all stations in each network, and count how many times a certain average transmission time is repeated among the 180336 different 802.11ah networks.
+ The results in Figure \ref{fig:tx-hist} show that, the average transmission time in the range of [1200 1500] $\mu$s has the most repeat number 24660,  and the average transmission time is mainly between 1000 us and 5000 us (around 90\% of all experiments). Therefore,  when average transmission time is considered as an input parameter of the model, 1000 us and 5000 us can be used as its minimum and maximum value for the training. A step size of 250 is selected. Therefore, using average transmission time results in a design space with only $25047 \times 17 = 425799$ data points, which is much less than  \textcolor{red}{$xx$} data points caused by using $\underline{d}$, $\bar{d}$, $\underline{ps}$ and $\bar{ps}$ as input parameters to represent the network. The kriging model can interpolate the results for data points outside the input parameter space.
 %Results for data points outside the input parameter space are obtained via linear interpolation of the two nearest data points included in the model.
  
  
  As an average transmission time can
-consist of a variety of packet size range that can affect
+consist of a variety of packet size ranges that can affect
 the throughput, the successfully packet receiving rate (i.e.,
-number of received packet per seconds) is used as the metric of the
+number of received packets per seconds) is used as the metric of 
 performance. The throughput can be subsequently calculated
 together with the packet size range for a specific network
 scenario.
@@ -279,33 +279,34 @@ Therefore, the surrogate model can be represented as a function  $\mathcal{F}$ :
 \begin{equation} \label{eq:raw_model}
 p_r = \mathcal{F}(n_r, d_r, s_r, \hat{t}_p) 
 \end{equation}
-It aims to predict the performance of a heterogeneous 802.11ah network with average packet transmission time $\hat{t}_p$, for a given RAW group $r$ with duration $d_r$, consisting of $s_r$ slots, and with $n_r$ stations assigned to it. The definition of the input parameters are listed in table \ref{tab:sumo parameters}.
+It aims to predict the performance of a heterogeneous 802.11ah network with average packet transmission time $\hat{t}_p$, for a given RAW group $r$ with duration $d_r$, consisting of $s_r$ slots, and with $n_r$ stations assigned to it. The definition of the input parameters are listed in Table \ref{tab:sumo parameters}.
 
 \subsection{The selection of parameter average packet transmission time \label{subsubsec:txselection}}
 
 
-In this section, we demonstrate average transmission time (packet receiving rate) is a proper input (output) parameter for the training, as it can represent the network conditions to some extent with the highly reduce design space size. As figure \ref{fig:tx-hist} shows there is a large number of distance and packet size range that can lead to the same average transmission time, it is vital that the networks with the same average transmission time have the similar behaviour, i.e., similar packet receiving rate. %As an average transmission time can consist of a variety of packet size range that can affect the throughput, the successfully packet receiving rate  (i.e., number of packet per seconds) is used as the metric of the performance. The throughput can be subsequently calculated together with the packet size range for a specific network scenario.
+In this section, we demonstrate that the average transmission time and packet receiving rate are proper input and output parameters for the training respectively, as they can represent the network conditions \textcolor{red}{to some extent} with  highly reduced design space size. As Figure \ref{fig:tx-hist} shows, there are a large number of distance and packet size ranges that can lead to the same average transmission time, it is vital that the networks with the same average transmission time have the similar behaviour, i.e., similar packet receiving rate, in order to accurately predict the xx.
+%As an average transmission time can consist of a variety of packet size range that can affect the throughput, the successfully packet receiving rate  (i.e., number of packet per seconds) is used as the metric of the performance. The throughput can be subsequently calculated together with the packet size range for a specific network scenario.
 
-We compare the performance ( i.e., packet receiving rate) of each average transmission time $\hat{t}_p$ consisting of different coverage range and packet size range, for different \gls{raw} slot load ratio. The \gls{raw} slot load ratio is defined as:
+We compare the performance ( i.e., packet receiving rate) of each average transmission time $\hat{t}_p$ consisting of different coverage ranges and packet size ranges, for different \gls{raw} slot load ratios. The \gls{raw} slot load ratio is defined as:
  \\
 \begin{equation}
 \mathcal{L}_{r} = \frac {n_r \times TXOP} {d_r \times \mathcal{T}_s}.
 \end{equation}
-Where $TXOP$ indicate the time including data packet transmission time ($T_x$), a SIFS (160 us) and the ACK transmission time (1000 us), $\mathcal{T}_s$ represents the packet sending interval of a station. 
+Where $TXOP$ indicate the time including data packet transmission time ($T_x$), a SIFS (160 us) and the ACK transmission time (1000 us). $\mathcal{T}_s$ represents the packet sending interval of a station. 
 %The minimal slot traffic load which can cause performance discrepancy is denoted as $\mathcal{L}_r^max$, in order to apply the model to the extended design space, the slot traffic load needs to be no larger than the $\mathcal{L}_r^max$. For transmission time $1000$ and $5000$ \textit{us}, the  $\mathcal{L}_r^max$ are \textcolor{red}{xx} and \textcolor{red}{xx}, respectively.
-Concretely, 500 design points for each load ratio (i.e., 0.4, 0.6, 0.8, 1.0, 1.6) are randomly selected, consisting of 5 different average transmission time (i.e., 1000,
-2000, 3000, 4000 and 5000 us). Each data point has four input parameters, i.e., station number, slot number, \gls{raw} duration, and average transmission time. The simulation has repeated for 10 times for each data point. During each simulation, the simulator randomly selects a coverage range and packet size range satisfying the required average transmission time. The \gls{cov} of each data point is calculated over 10 iterations. Subsequently, for each average transmission time, the \gls{cov} is averaged, among the data points with the same packet receiving rate and \gls{raw} slot load ratio respectively. The final results are shown in figure \ref{fig:tx-diff-Prate} and figure \ref{fig:tx-diff-load} . It turns out, the performance variability of the network (data point) is relevant to  average transmission time, packet receiving rate, and \gls{raw} slot load ratio.
+Concretely, 500 design points for each load ratio (i.e., 0.4, 0.6, 0.8, 1.0, 1.6) are randomly selected, consisting of 5 different average transmission times (i.e., 1000,
+2000, 3000, 4000 and 5000 us). Each data point has four input parameters, i.e., station number, slot number, \gls{raw} duration, and average transmission time. The simulation has repeated 10 times for each data point. During each simulation, the simulator randomly selects a coverage range and packet size range satisfying the required average transmission time. The \gls{cov} of each data point is calculated over 10 iterations. Subsequently, for each average transmission time, the \gls{cov} is averaged, among the data points with the same packet receiving rate and \gls{raw} slot load ratio respectively. The final results are shown in Figure \ref{fig:tx-diff-Prate} and Figure \ref{fig:tx-diff-load} . It turns out, the performance variability of the network \textcolor{red}{ (data point) is relevant} to  average transmission time, packet receiving rate, and \gls{raw} slot load ratio.
 
 
 
-Figure \ref{fig:tx-diff-Prate} shows that, the smaller average transmission time results in less variability, while the larger average transmission time leads to more variability. Moreover, the small packet receiving rate (i.e., no more than 50) results in quite high performance discrepancy, with \gls{cov} 0.57 and 1.12 for average transmission time 1000 us and 5000 us respectively. For the larger packet receiving rate, the performance remains stable, the \gls{cov} is less than 0.03 and around 0.6 for average transmission time 1000 and 2000 us, around 0.12 and 0.13 for average transmission 3000 and 4000 us, and 0.25 for average transmission time 5000 us. Due to the high performance discrepancy for small packet receiving rate, we excluded the points whose packet receiving rate is no more than 50 in figure \ref{fig:tx-diff-load}.
+Figure \ref{fig:tx-diff-Prate} shows that, the smaller average transmission time results in less variability, while the larger average transmission time leads to more variability. Moreover, a small packet receiving rate (i.e., no more than 50) results in quite high performance discrepancy, with \gls{cov} 0.57 and 1.12 for average transmission time 1000 $\mu$s and 5000 $\mu$s respectively. For  larger packet receiving rates, the performance remains stable, the \gls{cov} is less than 0.03 and around 0.6 for average transmission time 1000 and 2000 us, around 0.12 and 0.13 for average transmission 3000 and 4000 us, and 0.25 for average transmission time 5000 us. Due to the high performance discrepancy for small packet receiving rate, we excluded the points whose packet receiving rate is no more than 50 in Figure \ref{fig:tx-diff-load}.
 The results again demonstrate that, average transmission time has a significant impact on the performance discrepancy. Furthermore, the performance variation increases with larger \gls{raw} slot load. The \gls{cov} is 0.009 and 0.05 for \gls{raw} slot load ratio 0.4 and 1.6 when average transmission time is 1000 us. For average transmission time 3000 us, the \gls{cov} is 0.05 and 0.15 for \gls{raw} slot ratio 0.4 and 0.8, increase to 0.18 for overloaded traffic (i.e, \gls{raw} slot ratio 1.6).  While for average transmission time 5000 us, the \gls{cov} is relative large, ranging from 0.18 to 0.41 when \gls{raw} slot ratio increases from 0.6 to 1.6.
 
 
 
- The results shown in figure \ref{fig:tx-diff-Prate} and  \ref{fig:tx-diff-load}  suggests that, average transmission time can represent the network to some extent, especially for the small average transmission time, large packet receiving rate and non-overloaded traffic. As the trained \gls{raw} model is mainly used for performance optimization, only the data points with large packet receiving rate are interesting.
+ The results shown in Figure \ref{fig:tx-diff-Prate} and  \ref{fig:tx-diff-load}  suggests that, average transmission time can represent the network \textcolor{red}{some extent}, especially for the small average transmission time, large packet receiving rate and non-overloaded traffic. As the trained \gls{raw} model is mainly used for performance optimization, only the data points with large packet receiving rate are interesting.
  Moreover, as overload traffic is not common in realistic scenarios, we only need to focus on the non-overloaded traffic scenarios. \textcolor{red}{Tx 5000 us results in high performance discrepancy, should we mentioned the model is not suitable for Tx 5000?}. 
- There is a trade-off between the accuracy and training speed for the training. During the training, network scenarios with the same average transmission time is with a fixed coverage range and packet size range. 
+ There is a trade-off between the accuracy and training speed. During the training, network scenarios with the same average transmission time use a fixed coverage range and packet size range. 
 
 % explanation
 %The performance discrepancy of an average transmission time for different coverage and packet size ranges is mainly caused by the propagation loss, capture effect. As the location and packet size distribution among stations is different. As small average transmission time, for example transmission time $1000$ us, has relative short distance  and packet size, leading to small variance on the packet rate. While for large transmission time, stations have longer distance to the \gls{ap} and larger packet size, therefore, the packet rate has larger variance. \todo{update the explanation.}
@@ -430,11 +431,11 @@ The SUMO toolbox executes the following steps to train the RAW performance surro
 
 \begin{enumerate}
 
-\item \label{sm_tr_1} Based on the defined design space (cf. Table~\ref{tab:sumo parameters}), a initial design points are carefully selected to efficiently characterize the system. Each data point has four input parameters, i.e., station number, slot number, \gls{raw} duration, and average transmission time.
+\item \label{sm_tr_1} Based on the defined design space (cf. Table~\ref{tab:sumo parameters}), the initial design points are carefully selected to efficiently characterize the system. Each data point has four input parameters, i.e., number of stations, number of slots, \gls{raw} duration, and average transmission time.
 
 %The latin hypercube design (LHD) method is used here to select the design points. It is the most commonly used approach for intial design points selection, selecting sample points evenly along the configuration space while ensuring proportional representation of design variables.
 
-\item \label{sm_tr_2} The ns-3 simulator executes experiments with parameters from each initial data point and the general parameters of 802.11ah (cf. Table~\ref{tab:ns3 parameters}), the evaluation criterion (e.g., packet receiving rate) of the experiments are considered as the output of the data points. 
+\item \label{sm_tr_2} The ns-3 simulator executes experiments with parameters from each initial data point and the general parameters of 802.11ah (cf. Table~\ref{tab:ns3 parameters}). The evaluation criterion (e.g., packet receiving rate) of the experiments are considered as the output of the data points. 
 
 \item \label{sm_tr_3} After the experiments with all the initial data points, an initial surrogate model is created.
 
@@ -442,30 +443,30 @@ The SUMO toolbox executes the following steps to train the RAW performance surro
 
 \item \label{sm_tr_4} The sampling strategy is applied to select the next data points to improve the model accuracy.
 
-\item \label{sm_tr_5} The experiments are executed for the newly selected data points, the evaluation criterion of the experiments are considered as the output of the new data pints. 
+\item \label{sm_tr_5} The experiments are executed for the newly selected data points, the evaluation criterion of the experiments is considered as the output of the new data points. 
 
 \item \label{sm_tr_6} The surrogate model is updated with the newly selected data points.
 
-\item \label{sm_tr_7}  This process stops once the stop conditions are met, otherwise go back to step \ref{sm_tr_4}.
+\item \label{sm_tr_7}  This process stops once the stop conditions are met, otherwise it continues with step \ref{sm_tr_4}.
 \end{enumerate}
 
 
 Each experiment in ns-3 runs for 60 seconds of simulated time. As \gls{raw} is configured in each beacon interval of 204.8~ms, the results of every simulated configuration are averaged over 290 beacon intervals, ensuring the generality of the trained model.
-The SUMO toolbox is configured to use the proper method in each step in order to create the accurate surrogate with a few data points. 
+The SUMO toolbox is configured to use the proper method in each step in order to create an accurate surrogate model with a limited number of data points. 
 
 
 \begin{itemize}
 \item \textbf{Initial design points selection}  \\
- We use the latin hypercube design (LHD) ~\cite{FAViana2013} approach to select the initial data points, which has he best performance in general is  most commonly used. It selects sample points evenly along the configuration space while ensuring proportional representation of design variables. Furthermore, the initial sample size depends on the problem type, 200 initial data points is found a good choice for our problem.
+ We use the latin hypercube design (LHD) ~\cite{FAViana2013} approach to select the initial data points, which has the best performance in general and is  most commonly used. It selects sample points evenly along the configuration space while ensuring proportional representation of design variables. Furthermore, the initial sample size depends on the problem type, 200 initial data points was found a good choice for our problem.
  
 \item \textbf{The (initial) surrogate model creation}  \\
-There are a variety of supervised machine learning and regression methods can be used for surrogate model creation, such as Kriging \cite{forrester2008engineering}, polynomial response surfaces, radial basis functions, support vector machines (SVMs),  space mapping, or artificial neural networks (ANNs).Among these methods, Kriging model are 
-very popular in the modeling of  complex systems, including the complex wireless network \cite{SUMOWirelessConferencing,wowmom2018, LTEoptimization}.The kriging model is formed as:
+There are a variety of supervised machine learning and regression methods can be used for surrogate model creation, such as Kriging \cite{forrester2008engineering}, polynomial response surfaces, radial basis functions, support vector machines (SVMs),  space mapping, or artificial neural networks (ANNs). Among these methods, Kriging model is 
+very popular in the modeling of  complex systems, including complex wireless network \cite{SUMOWirelessConferencing,wowmom2018, LTEoptimization}.The Kriging model is formed as:
 \begin{equation}
 \hat{f} (X) = \sum_{i=1}^{V} {a_i}{k(x, x_i)}
 \end{equation}
-Where $V$ is the amount of basis vectors, $x$ represent the input data vector and $k(x, x_i)$ is the kernel function. There are several kernel (covariance) functions used by kriging mode, such as, Squared Exponential Kernel, Exponential Kernel, Matern 3/2, Matern 5/2, Rational Quadratic Kernel. Among them, the Matern types of kernel functions are  widely used, and we use the Matern kernenl function with %$v=3/2$ and 
-$5/2$ to creat the model. 
+Where $V$ is the amount of basis vectors, $x$ represent the input data vector and $k(x, x_i)$ is the kernel function. There are several kernel (covariance) functions used in kriging, such as Squared Exponential Kernel, Exponential Kernel, Matern 3/2, Matern 5/2, Rational Quadratic Kernel. Among them, the Matern types of kernel functions are  widely used, and we use the Matern kernel function with %$v=3/2$ and 
+$5/2$ to create the model. 
 
 \item \textbf{Sampling strategies} \\
 A novel sampling strategy called FLOLA-Voronoi \cite{vanderherten2015} is used to select the next design points to improve the model accuracy.  The FLOLA approach is used for exploiting the non-linear regions, while the Voronoi approach explores the sparsely sampled regions, the scores from  the FLOLA and Voronoi are combined to decide the next sample point. In our experiments, 10 new data points are picked in each interation.
