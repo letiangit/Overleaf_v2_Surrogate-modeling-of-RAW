@@ -1,4 +1,117 @@
-\section{Related Work \label{sec:related_work}}
+\section{Background \label{sec:Background}}
+
+ \subsection{IEEE~802.11 ah networks and \gls{raw} \label{subsec:80211ah_raw}}
+
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=0.45\textwidth]{figures/distance-datarate-512bytes}  \caption{The used transmission data rate for different distance. \label{fig:dist-datarate}}
+% \end{figure}
+
+
+\begin{table}[t]
+\centering
+\caption{802.11ah MCSs for 1, 2~MHz, NSS=1, GI=$8~\mu{}s$}
+\label{tab:wifi-modes}
+\begin{tabular}{ccccc}
+\hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}MCS\\ Index\end{tabular}} & \multirow{2}{*}{Modulation} & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Coding \\ rate\end{tabular}} & \multicolumn{2}{l}{Data rate (Kbps)} \\ \cline{4-5} 
+ &  &  & 1 Mhz & 2 Mhz \\ \hline
+0 & BPSK & 1/2 & 300 & 650 \\ 
+1 & QPSK & 1/2 & 600 & 1300 \\ 
+2 & QPSK & 3/4 & 900 & 1950 \\ 
+3 & 16-QAM & 1/2 & 1200 & 2600 \\ 
+4 & 16-QAM & 3/4 & 1800 & 3900 \\ 
+5 & 64-QAM & 2/3 & 2400 & 5200 \\ 
+6 & 64-QAM & 3/4 & 2700 & 5850 \\ 
+7 & 64-QAM & 5/6 & 3000 & 6500 \\ 
+8 & 256-QAM & 3/4 & 3600 & 7800 \\ 
+9 & 256-QAM & 5/6 & 4000 & Not valid \\ 
+\multirow{2}{*}{10} & \multirow{2}{*}{BPSK} & 1/2 with 2x & \multirow{2}{*}{150} & \multirow{2}{*}{Not valid} \\
+ & & repetition & & \\ \hline
+\end{tabular}
+\end{table}
+
+In this section, we provide an overview of the \gls{raw}, the IEEE~802.11ah network environment and its typical settings on the physical and MAC layers. 
+%A surrogate \gls{raw} model for such network scenarios is subsequently built to accurately predict the performance.
+
+
+%simulation environment parameters used during training. 
+%Since \gls{raw} is scalable under uplink traffic, 
+
+IEEE~802.11ah mainly targets \gls{iot} network scenarios, where sensors (stations) are randomly placed around the AP within a maximum radius, periodically monitor the environment and send the resulting data to a server (via the \gls{ap}). Like the legacy IEEE~802.11 technologies, at the physical layer, IEEE~802.11ah supports multiple transmission data rates represented by the MCSs. The stations are allowed to dynamically choose the MCS for packet transmission to adapt to the conditions of the wireless channel. As listed in Table \ref{tab:wifi-modes}, the number of supported MCSs depends on the channel width. For channel bandwidth 1 MHz,  MCS 0$-$10 are supported with transmission data rates ranging from 150 Kbps to 4 Mbps, and for 2 Mhz, MCS 0$-$9 are supported with transmission data rates ranging from 650 Kbps to 7.8 Mbps, more details can be found in \cite{80211ahStd}. At every beacon interval, the \gls{ap} broadcasts beacon frame carrying a \gls{rps} information element that specifies the \gls{raw} parameter configurations. Stations retrieve such \gls{raw} information from the beacon frame and access the channel only during their assigned \gls{raw} slot. 
+%In order to obtain high performance, there is a need to build a \gls{raw} model that can accurately predict the performance under a variety \gls{raw} parameter values and network conditions.
+
+
+The \gls{raw} information is carried in the \gls{rps} element, it specifies the stations belonging to the group, the number of slots, slot format and slot duration count sub-fields, which jointly determine the \gls{raw} slot duration as follows \cite{80211ahStd}: 
+%\textcolor{red}{\cite{80211ahStd}}: 
+\begin{equation} \label{eq:Duration}
+D = 500~\mu{}s + C \times 120~\mu{}s  
+\end{equation}
+where $C$ represents \textit{slot duration count} sub-field, which is either $y = 11$ or $y = 8$ bits long if the slot format sub-field is set to respectively $1$ or $0$. The \textit{number of slots} field is $14-y$ bits long. When $y = 11$, each RAW consists of at most 8 slots and the maximum value of $C$ is $2^{11}-1=2047$, in this case the slot duration is up to $246.14$~ms. Otherwise, each RAW consists of at most 64 slots and the maximum value of $C$ is $2^{8}-1=255$, the slot duration is thus limited to $31.1$~ms. The \gls{raw} group duration is the sum of its slot durations.
+
+
+
+% Besides \gls{raw}, there are numerous parameters involved in the physical and MAC layer of IEEE~802.11ah networks.
+% %while we mainly focus on the most commonly used scenarios where
+% In our experiments, we use the typical parameter settings, 
+% as shown in Table~\ref{tab:ns3 parameters}. Given the low-power nature of battery powered sensors, the physical layer parameters are configured based on the low-power 802.11ah radio hardware prototype developed by Ba et al.~\cite{Ba2016}, with a transmission power of 0~dBm, a gain of 0~dBi (for both sensor and \gls{ap}), and noise figure of 6.8~dB. With such physical layer setting, the coverage of the networks is up to 500 meters based on the physical layer performance evaluation in \cite{bellekens2017outdoor}. As the \gls{iot} applications have relatively small payload size, packet size is assumed to be between  32 and 512 bytes.
+
+
+% For each experimented scenario, we assume a coverage range to be $[d^-, d^+]  \subseteq [0, 500] $  meters and a packet size range to be $[ps^-, ps^+] \subseteq [32, 512] $ bytes. Each station $s$ randomly and uniformly chooses a value $d_s \in [d^-, d^+]$ as its distance to the \gls{ap}, and an integer value $ps_s \in [ps^-, ps^+]$ as its packet size. Based on its distance to the \gls{ap} $d_s$, the station $s$ uses the corresponding MCS for packet transmission according to the rate control method. Several rate control methods have been proposed and used on the real devices for legacy IEEE~802.11 to select the appropriate MCS for packet transmission, for example, Arf \cite{arf1997},  Aarf \cite{aarf2004}, Onoe \cite{Onoe} and Minstrel \cite{minstrel}. For the IEEE~802.11ah network, we use a simpler rate control method, allowing the stations to select the MCS solely based on its distance to the \gls{ap}, i.e., choosing the MCS which can stably achieve the maximal throughput at a certain distance, as shown in Figure \ref{fig:dist-datarate}. The size of the stations' transmit queues is configured to be 10 packets. 
+% %For training simplicity, we assume each station sends one packet per second, the built model can be further used by the \gls{raw} optimization algorithms, such as \gls{taora} \cite{Sensor2017,Sensys2017},  to calculate \gls{raw} performance under arbitrary data transmission intervals.
+
+
+
+% % As the \gls{iot} applications have relatively small payload size, we limit the packet size range $[\underline{ps}, \bar{ps}] $ to $[32, 512]$,  choose 500 meters as the maximum distance between stations and the \gls{ap} based on the physical layer performance evaluation in \cite{bellekens2017outdoor}.
+
+% %Each experiment runs for 60 seconds of simulated time. As \gls{raw} is configured in each beacon interval of 204.8~ms, the results of every simulated configuration are averaged over 290 beacon intervals, ensuring the generality of the trained model.
+
+
+
+% %As the RAW optimization algorithm proposed in Section~\ref{sec:algorithm} groups together stations that use the same \gls{mcs}, the model assumes a fixed \gls{mcs}. However, as \gls{raw} performance depends on the \gls{mcs} used, a different model is to be trained for each \gls{mcs} that stations are expected to use. We illustrate this by developing a separate a high-throughput (HT) and low-throughput (LT) model for two different \gls{mcs} parameter sets. This can be trivially extended to other \gls{mcs} values. 
+
+
+% \begin{table}[t]
+% \centering
+% \renewcommand{\arraystretch}{1.2}
+% %\tiny
+% \caption{\textsc{Simulation parameters used during training}\label{tab:ns3 parameters}}
+% \begin{tabular}{ll}
+% \hline
+% \textbf{PHY parameters}             & \textbf{Value}  \\
+% \hline
+% %Frequency (Mhz)                      & 868 \\
+% TX power (dBm)             & 0    \\
+% TX/RX gain (dB)                        & 0     \\
+% Noise Figure (dB)               & 6.8      \\  
+% %Coding method                  & BCC \\
+% Propagation model         & Outdoor \\ %, macro~\cite{Hazmi2012} \\
+% Error rate model               & YansErrorRate \\
+% \hline
+% \textbf{MAC parameters}               & \textbf{Value}  \\
+% \hline
+% % CWmin                          & 15 \\
+% % CWmax                          & 1023      \\
+% %Duration of AIFS (us)\textcolor{red}{change to DIFS}            & 316      \\
+% Traffic access categories             & \textcolor{black}{ AC\_{BE} } \\
+% Duration of AIFS ($\mu$s)             & 264      \\
+% Duration of SIFS ($\mu$s)            & 160      \\
+% %RTS/CTS                        & not enabled  \\
+% Beacon interval (ms)           & 204.8 \\
+% %Cross slot boundary            & Enabled \\
+% %Rate control algorithm         & constant  \\
+% Size of transmission queue (packets)  & 10  \\
+% Packet transmission interval (s)        & 1  \\
+% Station distribution           & random  \\
+% Rate control algorithm                     & XXX \\
+% %Average payload size (bytes)           & 64   \\
+% %Topology radius (m)     & 200  \\
+% \hline
+% \end{tabular}
+% \end{table}
+ 
+ 
+\subsection{Related Work \label{subsec:related_work}}
 
 
 As the IEEE~802.11ah standard does not specify how to configure the actual \gls{raw} grouping parameters, several studies have been conducted on \gls{raw} performance evaluation, modeling and optimization. Raeesi et al. evaluated  \gls{raw} performance using the network simulator OMNeT++, the results demonstrate that the RAW feature provides
