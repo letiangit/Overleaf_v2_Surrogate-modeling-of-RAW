@@ -63,13 +63,19 @@ points. \label{fig:regress-models}}
 %   \caption{Scatter plot. \label{fig:scatter-plot}}
 % \end{figure*}
 
+% \begin{figure*}[t]
+%     \centering
+%     \subfloat[Surrogate model prediction vs. simulation results \label{fig:scatter_all}]{\includegraphics[width=0.45\textwidth]{figures/scatter_full}}
+%     \subfloat[Relative error  \label{fig:full_design_error}]{\includegraphics[width=0.45\textwidth]{figures/full_design_error}}
+%   \caption{Comparison between the simulation results and surrogate model's prediction for the test data points, in terms of average packet receiving rate \label{fig:scatter-plot}}
+% \end{figure*}
+
+
 \begin{figure*}[t]
     \centering
-    \subfloat[Surrogate model prediction vs. simulation results \label{fig:scatter_all}]{\includegraphics[width=0.45\textwidth]{figures/scatter_full}}
-    \subfloat[Relative error  \label{fig:full_design_error}]{\includegraphics[width=0.45\textwidth]{figures/full_design_error}}
-    % \subfloat[Tx 1000 us \label{fig:scatter_tx1000}]{\includegraphics[width=0.33\textwidth]{figures/scatter_tx1000}}
-    % \subfloat[Tx 4000 us \label{fig:scatter_tx4000}]{\includegraphics[width=0.33\textwidth]{figures/scatter_tx4000}}
-    %\subfloat[Full design space with various types of transmission time \label{fig:delay-alpha-0}]{\includegraphics[width=0.33\textwidth]{figures/scatter_randomTx}}
+    \subfloat[Surrogate model prediction vs. simulation results \label{fig:scatter_all}]{\includegraphics[width=0.33\textwidth]{figures/scatter_full}}
+    \subfloat[Relative error for all packet receiving rate \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_error_all}}
+     \subfloat[Relative error for all packet receiving rate larger than 50 \textcolor{red}{pps}. \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_error_L50}}
   \caption{Comparison between the simulation results and surrogate model's prediction for the test data points, in terms of average packet receiving rate \label{fig:scatter-plot}}
 \end{figure*}
 
