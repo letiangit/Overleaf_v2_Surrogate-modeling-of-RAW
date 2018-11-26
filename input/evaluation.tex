@@ -74,19 +74,24 @@ points. \label{fig:regress-models}}
 \begin{figure*}[t]
     \centering
     \subfloat[Surrogate model prediction vs. simulation results \label{fig:scatter_all}]{\includegraphics[width=0.33\textwidth]{figures/scatter_full}}
-    \subfloat[Relative error for all packet receiving rate \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_error_all}}
-     \subfloat[Relative error for all packet receiving rate larger than 50 \textcolor{red}{pps}. \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_error_L50}}
+  %  \subfloat[Relative error for all packet receiving rate \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_error_all}}
+    \subfloat[Relative error for all packet receiving rate \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_relative_error_all}}
+    % \subfloat[Relative error for all packet receiving rate larger than 50 \gls{pps}. \label{fig:full_design_error}]{\includegraphics[width=0.33\textwidth]{figures/full_design_error_L50}}
+      \subfloat[Relative error for all packet receiving rate larger than 60 \gls{pps}. \label{fig:full_design_error_L60}]{\includegraphics[width=0.33\textwidth]{figures/full_design_relative_error_all_L60}}
   \caption{Comparison between the simulation results and surrogate model's prediction for the test data points, in terms of average packet receiving rate \label{fig:scatter-plot}}
 \end{figure*}
 
-\begin{figure*}[t]
-    \centering
-    \subfloat[Tx 1000 us  \label{fig:scatter_ana_tx1000}]{\includegraphics[width=0.33\textwidth]{figures/nstaPerSlot_Tratio_scatter_tx1000}}
-    \subfloat[Tx 3000 us \label{fig:scatter_ana_tx3000}]{\includegraphics[width=0.33\textwidth]{figures/nstaPerSlot_Tratio_scatter_tx3000}}
-    \subfloat[Tx 4000 us \label{fig:scatter_ana_tx4000}]{\includegraphics[width=0.33\textwidth]{figures/nstaPerSlot_Tratio_scatter_tx4000}}
-    %\subfloat[Full design space with various types of transmission time \label{fig:delay-alpha-0}]{\includegraphics[width=0.33\textwidth]{figures/scatter_randomTx}}
-  \caption{Illustration of the relations among model accuracy and $n^{\alpha}_r$ and  $d^{\beta}_r$. \label{fig:scatter-plot-ana}}
-\end{figure*}
+% \begin{figure*}[t]
+%     \centering
+%     \subfloat[Tx 1000 us  \label{fig:scatter_ana_tx1000}]{\includegraphics[width=0.33\textwidth]{figures/nstaPerSlot_Tratio_scatter_tx1000}}
+%     \subfloat[Tx 3000 us \label{fig:scatter_ana_tx3000}]{\includegraphics[width=0.33\textwidth]{figures/nstaPerSlot_Tratio_scatter_tx3000}}
+%     \subfloat[Tx 4000 us \label{fig:scatter_ana_tx4000}]{\includegraphics[width=0.33\textwidth]{figures/nstaPerSlot_Tratio_scatter_tx4000}}
+%     %\subfloat[Full design space with various types of transmission time \label{fig:delay-alpha-0}]{\includegraphics[width=0.33\textwidth]{figures/scatter_randomTx}}
+%   \caption{Illustration of the relations among model accuracy and $n^{\alpha}_r$ and  $d^{\beta}_r$. \label{fig:scatter-plot-ana}}
+% \end{figure*}
+
+
+
 
 % \begin{figure}[t]
 %     \centering
@@ -104,9 +109,13 @@ points. \label{fig:regress-models}}
 
 \begin{figure}[t]
     \centering
-{\includegraphics[width=0.8\columnwidth]{figures/full_constraint}}
-  \caption{Accuracy of surrogate model using Kriging method for full design space with different constraints. \label{fig:cdf_constraint}}
+%{\includegraphics[width=0.8\columnwidth]{figures/full_constraint}}
+{\includegraphics[width=0.8\columnwidth]{figures/full_constrain_L60}}
+  \caption{Accuracy of surrogate model using Kriging method for packet receiving rate larger than 60 in full design space. \label{fig:cdf_constraint}}
 \end{figure}
+
+
+
 
 % \begin{figure}[t]
 %     \centering
@@ -165,28 +174,30 @@ points. \label{fig:regress-models}}
 %   \caption{comparison between model and simulation with * stations per slots. \label{fig:staPerSlot}}
 % \end{figure}
 
-In this section, we evaluate the \gls{raw} model accuracy for the limited design space, in which the average transmission time consists of the coverage and packet size ranges used during the training process. As the design space includes xx data points, it is extremely expensive to run all experiments. Therefore, 6000 data points (called test data points) are randomly chosen for the evaluation of the model. To evaluate the accuracy of kriging model (with Matem 5/2) used in the model creation step, three additional regression models (i.e., linear regression, \gls{svm} and regression trees) are also created with the trained data points for comparison. The simulation results of the 6000 test data points are compared to the prediction of the models. 
+In this section, we evaluate the \gls{raw} model accuracy for the limited design space, in which the average transmission time consists of the coverage and packet size ranges used during the training process. 
+%As the design space includes xx data points, it is extremely expensive to run all experiments. Therefore, 
+6000 data points (called test data points) are randomly chosen for the evaluation of the model. To evaluate the accuracy of kriging model (with Matem 5/2) used in the model creation step, three additional regression models (i.e., linear regression, \gls{svm} and regression trees) are also created with the trained data points for comparison. The simulation results of the 6000 test data points are compared to the prediction of the models. 
 
 
 % Figure \ref{fig:regress-models} depicts the probability that the relative error (i.e., ratio between absolute throughput error and simulation results) of the  models compared to simulation are equal to or less than a given relative error.
 
-Figure \ref{fig:regress-models} depicts the \gls{cdf} of the relative error, i.e., ratio \textcolor{red}{between absolute throughput error of the model and simulation,  and simulation results}.
+Figure \ref{fig:regress-models} depicts the \gls{cdf} of the absolute relative error, i.e., ratio between absolute throughput error of the model and simulation,  and simulation results.
 It shows 76\% of the test data points has a relative error equal to or less than 0.1 for kriging model with Matem 5/2, while 30\%, 10\% and 44\% for the linear regression, \gls{svm}, regression tree models respectively. Similarly,  for kriging model, 88\% of the test data points result in  a relative error not larger than 0.2, the percentage declines to 53\%, 17\% and 65\% for the linear regression, \gls{svm} and regression tree models respectively. The results show the Kriging model has higher accuracy than the other three regression models. However, there are still some data points with high relative error and we will further investigate. 
 %the model is not good enough to be directly applied to the \gls{raw} modeling problem. %\textcolor{red}{consider to remove the line of Kriging, Matem 3/2}.
 
 
 To further explore the performance of the Kriging model, Figure \ref{fig:scatter-plot}  shows a scatterplot of the output of simulation and predication of the model.
 %for the same test data points.
-The line  $y=x$ represents the ideal case where the model can precisely predict the output of all data points without any errors. Points located near the line $y=x$ indicates that they can be accurately predicated by the model, and vice versa. The points are color-coded based on the relative errors, red means the relative error lower than 10\%, blue represent the relative error between 10\% and 20\%, and green indicates the error larger than 20\%. Figure \ref{fig:scatter_all} reveals interesting characteristic of the created \gls{raw} model, the large error mainly exists for the small packet rates, which makes sense as a small absolute error leads to a large relative error. As the model is mainly used for \gls{raw} optimization, we are more interested in the large values, as these signify higher throughput and better performance. \textcolor{red}{Most of the points} with relative error between 10\% and 20\%  have packet rate below 150, \textcolor{red}{most of the relative error} larger than 20\% appear when the packet rate is below 100, large errors are especially concentrated at packet rates below \textcolor{red}{40}. 
+The line  $y=x$ represents the ideal case where the model can precisely predict the output of all data points without any errors. Points located near the line $y=x$ indicates that they can be accurately predicated by the model, and vice versa. The points are color-coded based on the relative errors, red means the relative error lower than 10\%, blue represent the relative error between 10\% and 20\%, and green indicates the error larger than 20\%. Figure \ref{fig:scatter_all} reveals interesting characteristic of the created \gls{raw} model, the large error mainly exists for the small packet rates, which makes sense as a small absolute error leads to a large relative error. As the model is mainly used for \gls{raw} optimization, we are more interested in the large values, as these signify higher throughput and better performance. \textcolor{red}{Most of the points} with relative error between 10\% and 20\%  have packet rate below 150, \textcolor{red}{most of the relative error} larger than 20\% appear when the packet rate is below 100, large errors are especially concentrated at packet rates below \textcolor{red}{40}.  The \gls{cdf} of the relative error for the Kriging model is updated with packet receiving rate larger than 60, and depicted in Figure \ref{fig:cdf_constraint}. As it shows, about 90\% of the data points have a relative error equal to or less than 0.1, improving 18\%. 
 
-Moreover, the relative error varies for points with different average transmission times. Figure \ref{fig:full_design_error} depicts the relative error as a function of the packet receiving rate (simulation result) with transmission time $1000$, $2000$, $3000$ and $4000$ us respectively. Similar to figure  \ref{fig:scatter_all}, it shows the high relative error mainly exists for low packet receiving rate. Moreover, the results reveals the smaller average transmission time results in less relative error than larger average transmission.
+Moreover, the relative error varies for points with different average transmission times. Figure \ref{fig:full_design_error} depicts the relative error as a function of the packet receiving rate (simulation result) with transmission time $1000$, $2000$, $3000$, $4000$ and $5000$ $\mu$s respectively. Similar to figure  \ref{fig:scatter_all}, it shows the high relative error mainly exists for low packet receiving rate. Moreover, the results reveals the smaller average transmission time results in less relative error than larger average transmission.
  
 %  Compare to transmission time $4000$ \textit{us}, the transmission time $1000$ \textit{us} results in much less error, there is a few points with error between 10\% and 20\%, and errors beyond 20\% (\textcolor{red}{the figure needs to be replotted}). While transmission time $4000$ \textit{us} has the similar error distribution as figure \ref{fig:scatter_all}. In addition, for the same packet rate, transmission time $1000$ \textit{us} results in less error than $4000$ \textit{us} does. For example, it has much less points with error between 10\% and 20\% in the packet rate range [50, 150].
 
 
 % Take $1000$ and $4000$ \textit{us} as an example, figure \ref{fig:scatter_tx1000} and \ref{fig:scatter_tx4000} depict the scatterplot for points with transmission time $1000$ and $4000$ \textit{us} respectively. Compare to transmission time $4000$ \textit{us}, the transmission time $1000$ \textit{us} results in much less error, there is a few points with error between 10\% and 20\%, and errors beyond 20\% (\textcolor{red}{the figure needs to be replotted}). While transmission time $4000$ \textit{us} has the similar error distribution as figure \ref{fig:scatter_all}. In addition, for the same packet rate, transmission time $1000$ \textit{us} results in less error than $4000$ \textit{us} does. For example, it has much less points with error between 10\% and 20\% in the packet rate range [50, 150].
 
-In conclusion, from figure \ref{fig:scatter-plot}, we discover that, for the design space, the surrogate \gls{raw} model model can accurately predict the output when the packet receiving rate is high, which is vital for the \gls{raw} model as it is commonly used for maximizing the packet receiving rate (equivalent to high throughput). Therefore, the model can actually be applied to the \gls{raw} modeling problem if the data points resulting in low packet rate are excluded from the model.
+In conclusion, from figure \ref{fig:scatter-plot}, we discover that, for the design space, the surrogate \gls{raw} model model can accurately predict the output when the packet receiving rate is high, which is vital for the \gls{raw} model as it is commonly used for maximizing the packet receiving rate (equivalent to high throughput). Therefore, the model can actually be applied to the \gls{raw} modeling problem if only the data points resulting in high packet receiving rate are considered from the model.
 %Last but not least, the output (packet rate) of data point with high transmission time has higher variance.
 
 % \textcolor{red}{Two question of figure \ref{fig:regress-models}:} \\
@@ -198,13 +209,16 @@ In conclusion, from figure \ref{fig:scatter-plot}, we discover that, for the des
 %As the goal of \gls{raw} is to maximize the throughput (packet receiving rate) in dense scenarios with heavy traffic load, the \gls{raw} configurations that result in low packet rate can be excluded from the model, allowing the model to accurately predict the output of the given \gls{raw} configuration.
  
  %Let $NstaPSlot$ denote the number of stations per \gls{raw} slot, and $Tratio$ represent the ratio between \gls{raw} slot duration and transmission time.
-Figure \ref{fig:scatter-plot-ana} shows the scatterplot of the number of stations in one \gls{raw} slot ($N^{\alpha}_{r}$) and the ratio between \gls{raw} slot duration and transmission time ($N^{\beta}_r$), for different relative errors. As it reveals, for transmission times $3000$ and $4000$ \textit{us}, the larger errors mainly exist for \gls{raw} configuration in which either too many stations contend for the channel in one \gls{raw} slot or the \gls{raw} slot duration is too short to transmit one packet, resulting in low packet rate \textcolor{red}{(not depicted)}. Therefore, to accurately predict the output of a given \gls{raw} configuration, a constraint is added when applying the model, i.e., 
-\begin{equation} \label{eq:constraint}
-n^{\alpha}_r < \alpha \wedge d^{\beta}_r >= \beta
-\end{equation}
+ 
+% Figure \ref{fig:scatter-plot-ana} shows the scatterplot of the number of stations in one \gls{raw} slot ($N^{\alpha}_{r}$) and the ratio between \gls{raw} slot duration and transmission time ($N^{\beta}_r$), for different relative errors. As it reveals, for transmission times $3000$ and $4000$ \textit{us}, the larger errors mainly exist for \gls{raw} configuration in which either too many stations contend for the channel in one \gls{raw} slot or the \gls{raw} slot duration is too short to transmit one packet, resulting in low packet rate \textcolor{red}{(not depicted)}. Therefore, to accurately predict the output of a given \gls{raw} configuration, a constraint is added when applying the model, i.e., 
+% \begin{equation} \label{eq:constraint}
+% n^{\alpha}_r < \alpha \wedge d^{\beta}_r >= \beta
+% \end{equation}
+
 % Through analyzing the simulation results and model, we found out that the low packet rate are mainly caused by the inefficient \gls{raw} configurations, either too much stations contending the channel in one raw slot or the raw slot duration is too short to transmit one packet. 
 %\item Go to more realistic cases at the end of this section, where the results are better. (for reduced and full design space, to compare the difference in performance) \\
-Therefore, the \gls{cdf} of the relative error for the Kriging model is updated with different $\alpha$ and $\beta$, and depicted in Figure \ref{fig:cdf_constraint}. As it shows, nearly 90\% of the data points have a relative error equal to or less than 0.1 for $\alpha = 50$ and $\beta = 1$. If $\alpha$ is further reduced to 10, the percentage goes up to 95\%. 
+
+% Therefore, the \gls{cdf} of the relative error for the Kriging model is updated with different $\alpha$ and $\beta$, and depicted in Figure \ref{fig:cdf_constraint}. As it shows, nearly 90\% of the data points have a relative error equal to or less than 0.1 for $\alpha = 50$ and $\beta = 1$. If $\alpha$ is further reduced to 10, the percentage goes up to 95\%. 
 
 
 
@@ -230,8 +244,7 @@ Therefore, the \gls{cdf} of the relative error for the Kriging model is updated 
 
 %  One of the input parameters used by the \gls{raw} modeling, \textit{average transmission time}, is actually represented by two parameters of the 802.11ah network, i.e., distance between stations and \gls{ap}, and packet size of the stations. In the modeling process, for each average transmission time, the network are configured with a fixed distance range and packet size. However, there are a large number of distance and packet size range that can lead to the same average transmission time. 
  
- The results in previous section have demonstrated that, under certain constraints, the built model has high accuracy on predicting the output for the design space. In this section, we further explore the performance of the model for the extrapolated design space. In the extrapolated design space, 
- a data point with average transmission time Tx, consists of different coverage and packet size ranges than the one used during the training.
+ The results in previous section have demonstrated that, for the high values, the built model has high accuracy on predicting the output for the design space. In this section, we further explore the performance of the model for the extrapolated design space. In the extrapolated design space, a data point with average transmission time Tx, consists of different coverage and packet size ranges than the one used during the training.
  
  
  \begin{figure}[t]
@@ -240,7 +253,9 @@ Therefore, the \gls{cdf} of the relative error for the Kriging model is updated 
   \caption{Accuracy of Surrogate model using Kriging method for extrapolated design space with different constraints. \label{fig:cdf_constraint_extended}}
 \end{figure}
  
-The 6000 test data points used in Figure \ref{fig:regress-models} and Figure \ref{fig:cdf_constraint} are again simulated. However, for a data point with average transmission time Tx, the simulator randomly selects a  coverage and packet size range which can result in the average transmission time Tx. The simulation results are compared to the output of the built models, as shown in Figure \ref{fig:cdf_constraint_extended}. It shows, compare to the limited design space, the extrapolated design space results in more error in terms of model accuracy. Even under the constraint $n^{\alpha}_r < 10 \wedge d^{\beta}_r >= 1$, the model accuracy is still not satisfying. Around 60\% of data points have relative error less than 10\%. The number goes up to 78\% for a relative error less than 20\%. The lower model accuracy for the extrapolated design space is not surprising. In the modeling process, for each average transmission time, the network is configured with a fixed distance range and packet size. However, in the extrapolated design space, for the same average transmission time, the network could could be configured with other distance  and packet size ranges. Therefore, model accuracy is sacrificed in order to speed up the training process. This aligns with our discovery in Section \ref{subsubsec:txselection}, which also indicates high model accuracy can still be achieved for the scenarios that we are interested in, \todo{explain the scenarios}. 
+The 6000 test data points used in previous section are again simulated. However, unlike previous simulations, for a data point with average transmission time Tx, the simulator randomly selects a  coverage and packet size range which can result in the average transmission time Tx. The simulation results are compared to the output of the built models, as shown in Figure \ref{fig:cdf_constraint_extended}. It shows, compare to the limited design space, the extrapolated design space results in more error in terms of model accuracy. 
+
+Even under the constraint $n^{\alpha}_r < 10 \wedge d^{\beta}_r >= 1$, the model accuracy is still not satisfying. Around 60\% of data points have relative error less than 10\%. The number goes up to 78\% for a relative error less than 20\%. The lower model accuracy for the extrapolated design space is not surprising. In the modeling process, for each average transmission time, the network is configured with a fixed distance range and packet size. However, in the extrapolated design space, for the same average transmission time, the network could could be configured with other distance  and packet size ranges. Therefore, model accuracy is sacrificed in order to speed up the training process. This aligns with our discovery in Section \ref{subsubsec:txselection}, which also indicates high model accuracy can still be achieved for the scenarios that we are interested in, \todo{explain the scenarios}. 
  
 %  In order to make the trained model more applicable to the extrapolated design space, we first explore the performance difference of a variety of distance and packet size range leading to the same average transmission time. For each data point, 10 different distance and packet size range are randomly selected and simulated. Take average transmission time  $1000$ and $5000$ us as an example, figure \ref{fig:tx_diff_compare} shows, the packet receiving rate as a function of station number for \gls{raw} duration $204800$ \textit{us} and slot number $10$. The lines represent the 10 different iterations. The result shows that the same packet rate is achieved until a certain number of stations, then discrepancy among the packet rates of different distance and packet size ranges starts to appear. Moreover, the breaking points where the discrepancy occurs depends on the average transmission time. As figure \ref{fig:tx_diff_tx1000} shows, the packet rate start to vary when station number is 260, while the performance difference is triggered by much less stations (around 45) fro transmission time $5000$ \textit{us}.  With a given slot number and \gls{raw} duration, station number determines the traffic load of the \gls{raw} slot. Therefore, figure \ref{fig:tx_diff_compare} indicates that, the performance discrepancy is caused by the  high traffic load $L_r$:  \\
 % \begin{equation}
@@ -277,7 +292,8 @@ The results show, for the extrapolated design space, the surrogate model is able
 
  \begin{figure}[t]
     \centering
-{\includegraphics[width=0.8\columnwidth]{figures/tx_result_load_all_yxlim}}
+%{\includegraphics[width=0.8\columnwidth]{figures/tx_result_load_all_yxlim}}
+{\includegraphics[width=0.8\columnwidth]{figures/avg_result_Prate_tx_extend_08}}
   \caption{Performance for extrapolated design space with different packet receiving rate and average transmission time. \label{fig:results-extended-prate}}
   % new load ratio, from 2-8
 \end{figure}
@@ -285,7 +301,8 @@ The results show, for the extrapolated design space, the surrogate model is able
 
  \begin{figure}[t]
     \centering
-{\includegraphics[width=0.8\columnwidth]{figures/1_50_error_fliter}}
+%{\includegraphics[width=0.8\columnwidth]{figures/1_50_error_fliter}}
+{\includegraphics[width=0.8\columnwidth]{figures/avg_result_load_tx_extended_08}}
   \caption{Performance for extrapolated design space with different slot load ratio and average transmission time. \label{fig:results-extended-load}}
   % new load ratio, from 2-8, fliter out small output
 \end{figure}

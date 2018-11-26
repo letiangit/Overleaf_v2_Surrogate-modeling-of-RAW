@@ -125,7 +125,7 @@ As illustrated in Figure \ref{fig:sumo-ns3},  surrogate modeling mainly involves
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.45\textwidth]{figures/distance-datarate}  \caption{The used transmission data rate for different distance. \label{fig:dist-datarate}}
+  \includegraphics[width=0.45\textwidth]{figures/distance-datarate}  \caption{\gls{mcs} as a function of distance. \label{fig:dist-datarate}}
 \end{figure}
 
 Besides \gls{raw}, there are numerous parameters involved in the physical and MAC layer of IEEE~802.11ah networks.
@@ -265,14 +265,11 @@ Where $p_r$ represents the packet receiving rate. It aims to predict the perform
 
 In this section, we demonstrate that the average transmission time 
 %and packet receiving rate 
-is a proper input parameter for the model, as it can accurately represent the network conditions with highly reduced design space size. The representativeness lies on that, networks with the same average transmission time have the similar behaviour, i.e., similar packet receiving rate, in order to accurately predict one for the other. As the size of design space has been discussed in section \ref{subsec:network_para_design}, this section focus on the representativeness. 
+is a proper input parameter for the model, as it can accurately represent the network conditions with highly reduced design space size. As the size of design space has been discussed in section \ref{subsec:network_para_design}, this section focus on the representativeness. The representativeness lies on that, networks with the same average transmission time have small variance in behaviour, i.e., similar packet receiving rate, in order to accurately predict one for the other. Since the model is mainly used for optimization, we are more interested in the large values and high \gls{pdr}. The large values signify higher throughput and better performance, and high \gls{pdr} indicates lower packet loss. The \gls{cov}, also known as relative standard deviation, is used as the criterion to evaluate the variance of the output (i.e., packet receiving rate)  of networks with the same average transmission time $T_x$ but different coverage and packet size ranges. \gls{cov} is a measure of variation or dispersion of a set of data values, it is calculated by dividing the standard deviation of a series of values by the average of the values.
+
 %As Figure \ref{fig:tx-hist} shows, there are a large number of coverage and packet size ranges that can lead to the same average transmission time. 
-Therefore, we use \gls{cov}, also known as relative standard deviation, as the criterion to evaluate the variance of the output (i.e., packet receiving rate)  of networks with the same average transmission time $T_x$ but different coverage and packet size ranges. \gls{cov} is a measure of variation or dispersion of a set of data values, it is calculated by dividing the standard deviation of a series of values by the average of the values.
 
 %it is vital that the networks with the same average transmission time have the similar behaviour, i.e., similar packet receiving rate, in order to accurately predict one for the other.
-
-
-
 
 
 
@@ -281,7 +278,11 @@ Therefore, we use \gls{cov}, also known as relative standard deviation, as the c
 %As an average transmission time can consist of a variety of packet size range that can affect the throughput, the successfully packet receiving rate  (i.e., number of packet per seconds) is used as the metric of the performance. The throughput can be subsequently calculated together with the packet size range for a specific network scenario.
 
 %In order to proof the viability of using average transmission time as the input parameter representing the network conditions, we compare the performance ( i.e., packet receiving rate) of different coverage and packet size ranges, which all results in the same average transmission time $T_x$. 
-The performance is compared under different \gls{raw} slot load ratios. The \gls{raw} slot load ratio is defined as the ratio between the required transmission time of the 
+
+
+
+
+The variance is evaluated under different packet receiving rate and \gls{raw} slot load ratios. The \gls{raw} slot load ratio is defined as the ratio between the required transmission time of the 
 packets that are allowed to transit in a \gls{raw} group, and duration of the \gls{raw} group. Its definition is as follows:
  \\
 \begin{equation}
@@ -292,22 +293,33 @@ TXOP = T_x + T_{SIFS} +  T_{ACK}
 \end{equation}
 Where $TXOP$ indicate the time including data packet transmission time $T_x$, a SIFS time (160 $\mu$s) and the ACK transmission time (1000 $\mu$s). $\mathcal{T}_s$ represents the packet sending interval of a station. A large value means a high input traffic load, and vice versa. The network is under overloaded traffic condition when slot load ratio is larger than 1.
 %The minimal slot traffic load which can cause performance discrepancy is denoted as $\mathcal{L}_r^max$, in order to apply the model to the extended design space, the slot traffic load needs to be no larger than the $\mathcal{L}_r^max$. For transmission time $1000$ and $5000$ \textit{us}, the  $\mathcal{L}_r^max$ are \textcolor{red}{xx} and \textcolor{red}{xx}, respectively.
-Concretely, 500 design points for each average transmission times (i.e., 1000, 2000, 3000, 4000 and 5000 $\mu$s) are randomly selected, 
-consisting of 5 different load ratio (i.e., 0.4, 0.6, 0.8, 1.0, 1.6). Each data point has four input parameters, i.e., number of station, number of slot, \gls{raw} duration, and average transmission time. The simulation has repeated 10 times for each data point. During each simulation, the simulator randomly selects a different coverage and packet size range satisfying the required average transmission time. After simulation, the \gls{cov} of each data point's output (i.e., packet receiving rate) is calculated. Subsequently, for each average transmission time, the \gls{cov} is averaged, among the data points with the same packet receiving rate and \gls{raw} slot load ratio respectively. The final results are shown in Figure \ref{fig:tx-diff-Prate} and \ref{fig:tx-diff-load}. 
+In the evaluation, 500 design points for each average transmission times (i.e., 1000, 2000, 3000, 4000 and 5000 $\mu$s) are randomly selected, 
+consisting of 5 different \gls{raw} slot load ratio (i.e., 0.4, 0.6, 0.8, 1.0, 1.6). Each data point has four input parameters, i.e., number of station, number of slot, \gls{raw} duration, and average transmission time. The simulation runs 10 times for each data point. During each simulation, the simulator randomly selects a different coverage and packet size range satisfying the required average transmission time. After simulation, the \gls{cov} of each data point's output (i.e., packet receiving rate) is calculated. Subsequently, for each average transmission time, the \gls{cov} is averaged, among the data points with the same packet receiving rate and \gls{raw} slot load ratio respectively. The final results are shown in Figure \ref{fig:tx-diff-Prate} and \ref{fig:tx-diff-load}, each includes the results of both all data points and only the data points with \gls{pdr} larger than 80\%.
 %It turns out, the performance variability of the network \textcolor{red}{ (data point) is relevant} to  average transmission time, packet receiving rate, and \gls{raw} slot load ratio.
 
 
 
-Figure \ref{fig:tx-diff-Prate} shows that, the smaller average transmission time results in less variability, while the larger average transmission time leads to more variability. Moreover, a small packet receiving rate (i.e., less than 60) results in quite high performance discrepancy, with \gls{cov} 1.009 and 2.08 for average transmission time 1000 $\mu$s and 5000 $\mu$s respectively. For larger packet receiving rates, the performance remains stable, the \gls{cov} is less than 0.03 and around 0.06 for average transmission time 1000 and 2000 us, around 0.12 and 0.15 for average transmission 3000 and 4000 us, and 0.25 for average transmission time 5000 us. The high performance discrepancy for small packet receiving rate make sense, as a small value more easily leads to a large discrepancy. It should be noted that, the maximum achievable packet receiving rate decreases as the average transmission time increases, since more time is needed for one packet transmission.
+Figure \ref{fig:tx-diff-Prate-all} shows that, small packet receiving rate (i.e., less than 60) can result in quite high performance discrepancy, with \gls{cov} 1.009 and 2.08 for average transmission time 1000 $\mu$s and 5000 $\mu$s respectively. For the larger packet receiving rate, the \gls{cov} is around 0.25 for average transmission time 4000 $\mu$s and 5000 $\mu$s, the variance is still high. However, when focus on the data points with \gls{pdr} larger than 80\%, the \gls{cov} is significantly reduced, as depicted in Figure \ref{fig:tx-diff-Prate-08}. Moreover, the smaller average transmission time results in less variability, while the larger average transmission time leads to more variability. For example, the \gls{cov} is at most 0.02, between 0.02 and 0.07, for average transmission time 1000 and 2000 $\mu$s. While for average transmission time 5000 $\mu$s, the \gls{cov} ranges from 0.1 to 0.16. It should be noted that, the maximum achievable packet receiving rate decreases as the average transmission time increases, since more time is needed for one packet transmission.
+%The high performance discrepancy for small packet receiving rate make sense, as a small value more easily leads to a large discrepancy. 
+% the smaller average transmission time results in less variability, while the larger average transmission time leads to more variability. Moreover, a small packet receiving rate (i.e., less than 60) results in quite high performance discrepancy, with \gls{cov} 1.009 and 2.08 for average transmission time 1000 $\mu$s and 5000 $\mu$s respectively. For larger packet receiving rates, the performance remains stable, the \gls{cov} is less than 0.03 and around 0.06 for average transmission time 1000 and 2000 us, around 0.12 and 0.15 for average transmission 3000 and 4000 us, and 0.25 for average transmission time 5000 us. The high performance discrepancy for small packet receiving rate make sense, as a small value more easily leads to a large discrepancy. It should be noted that, the maximum achievable packet receiving rate decreases as the average transmission time increases, since more time is needed for one packet transmission.
+Figure \ref{fig:tx-diff-load-all} again demonstrates that, average transmission time has a significant impact on the performance discrepancy. Furthermore, it reveals that the performance variation increases with larger \gls{raw} slot load. However, except for average transmission time 1000 $\mu$s, the \gls{cov} is quit high (above 0.2) in most cases. By only focusing on the data points with \gls{pdr} larger than 80\%, the \gls{cov} can be significantly reduced, as depicted in Figure \ref{fig:tx-diff-load-08}.
+For example, the \gls{cov} is 0.001 and 0.02 for \gls{raw} slot load ratio 0.4 and 1.0 when average transmission time is 1000 $\mu$s. For average transmission time 3000 $\mu$s, The \gls{cov} ranges from 0.05 to 0.1,  from 0.1 to 0.16, for  average transmission time 3000 and 5000  $\mu$s, respectively. \todo{add explanation.}
+ %The higher \gls{raw} slot load ratio means more fierce condition, 
 
-\textcolor{red}{Since the model is mainly used for optimization, we are more interested in the large values, as these signify higher throughput and better performance}. Therefore, in Figure \ref{fig:tx-diff-load}, only the data points whose packet receiving rate is more than 60 are depicted. The result again demonstrates that, average transmission time has a significant impact on the performance discrepancy. Furthermore, it reveals that the performance variation increases with larger \gls{raw} slot load. 
-For example, for average transmission time 1000 $\mu$s, the \gls{cov} is 0.009 and 0.05 for \gls{raw} slot load ratio 0.4 and 1.6 when average transmission time is 1000 $\mu$s. 
-%For average transmission time 3000 us, the \gls{cov} is 0.05 and 0.15 for \gls{raw} slot ratio 0.4 and 0.8, increase to 0.18 for overloaded traffic (i.e, \gls{raw} slot ratio 1.6).  
-While for average transmission time 5000 $\mu$s, the \gls{cov} is relative large, ranging from 0.18 to 0.41 when \gls{raw} slot ratio increases from 0.6 to 1.6. \todo{reason}
-The higher \gls{raw} slot load ratio means more fierce condition, 
+%Figure \ref{fig:tx-diff-load}, only the data points whose packet receiving rate is more than 60 are depicted. The result again demonstrates that, average transmission time has a significant impact on the performance discrepancy. Furthermore, it reveals that the performance variation increases with larger \gls{raw} slot load. 
+% For example, for average transmission time 1000 $\mu$s, the \gls{cov} is 0.009 and 0.05 for \gls{raw} slot load ratio 0.4 and 1.6 when average transmission time is 1000 $\mu$s. 
+% %For average transmission time 3000 us, the \gls{cov} is 0.05 and 0.15 for \gls{raw} slot ratio 0.4 and 0.8, increase to 0.18 for overloaded traffic (i.e, \gls{raw} slot ratio 1.6).  
+% While for average transmission time 5000 $\mu$s, the \gls{cov} is relative large, ranging from 0.18 to 0.41 when \gls{raw} slot ratio increases from 0.6 to 1.6. \todo{reason}
+% The higher \gls{raw} slot load ratio means more fierce condition, 
 
 
- The results shown in Figure \ref{fig:tx-diff-Prate} and  \ref{fig:tx-diff-load} reveal that, average transmission time can represent the conditions of network, which has small average transmission time, large packet receiving rate and non-overloaded traffic. In this paper, we use the average transmission time as a input parameter for the training, due to the following three reasons. First of all, the trained \gls{raw} model is mainly used for performance optimization, mainly the data points with large packet receiving rate are interesting. Second, overload traffic is not common in realistic scenarios, we only need to focus on the non-overloaded traffic scenarios. Last but not least, as mentioned in section \ref{subsec:network_para_design}, compare to parameters {${d^-}$, ${d^+}$, ${ps^-}$, ${ps+}$}, average transmission time $\hat{p_p}$ lead to an input design space with only xx data points. Therefore, there is a trade-off between the accuracy and training speed. \textcolor{red}{Tx 5000 us results in high performance discrepancy, should we mentioned the model is not suitable for Tx 5000?}. During the training, network scenarios with the same average transmission time use a fixed coverage range and packet size range. 
+
+ 
+Since the trained \gls{raw} model is mainly used for performance optimization, mainly the data points with large packet receiving rate are and high \gls{pdr} are our focus, 
+based on the results shown in Figure \ref{fig:tx-diff-Prate} and \ref{fig:tx-diff-load}, we can conclude that  average transmission time is able to represent the conditions of network. Therefore, in this paper, we use the average transmission time as a input parameter for the training.
+
+
+%  average transmission time can represent the conditions of network, which has small average transmission time, large packet receiving rate and non-overloaded traffic. In this paper, we use the average transmission time as a input parameter for the training, due to the following three reasons. First of all, the trained \gls{raw} model is mainly used for performance optimization, mainly the data points with large packet receiving rate are interesting. Second, overload traffic is not common in realistic scenarios, we only need to focus on the non-overloaded traffic scenarios. Last but not least, as mentioned in section \ref{subsec:network_para_design}, compare to parameters {${d^-}$, ${d^+}$, ${ps^-}$, ${ps+}$}, average transmission time $\hat{p_p}$ lead to an input design space with only xx data points. Therefore, there is a trade-off between the accuracy and training speed. \textcolor{red}{Tx 5000 us results in high performance discrepancy, should we mentioned the model is not suitable for Tx 5000?}. During the training, network scenarios with the same average transmission time use a fixed coverage range and packet size range. 
 
 % explanation
 %The performance discrepancy of an average transmission time for different coverage and packet size ranges is mainly caused by the propagation loss, capture effect. As the location and packet size distribution among stations is different. As small average transmission time, for example transmission time $1000$ us, has relative short distance  and packet size, leading to small variance on the packet rate. While for large transmission time, stations have longer distance to the \gls{ap} and larger packet size, therefore, the packet rate has larger variance. \todo{update the explanation.}
@@ -352,14 +364,14 @@ The higher \gls{raw} slot load ratio means more fierce condition,
 % \end{figure}
 
 
-\begin{figure}[t]
+\begin{figure*}[t]
     \centering
-    \subfloat[All data points  \label{fig:scatter_ana_tx1000}]{\includegraphics[width=0.33\textwidth]{figures/new_load_avg_result_Prate_tx_all}} \\
-    \subfloat[data points with \gls{pdr} more than 80\% \label{fig:scatter_ana_tx3000}]{\includegraphics[width=0.33\textwidth]{figures/new_load_avg_result_Prate_tx_all_08}}
+    \subfloat[All data points  \label{fig:tx-diff-Prate-all}]{\includegraphics[width=0.40\textwidth]{figures/new_load_avg_result_Prate_tx_all}} 
+    \subfloat[data points with \gls{pdr} more than 80\% \label{fig:tx-diff-Prate-08}]{\includegraphics[width=0.40\textwidth]{figures/new_load_avg_result_Prate_tx_all_08}}
   \caption{\gls{cov} of packet receiving rate as a function of packet receiving rate for different average transmission time. 
   %consisting of different coverage and packet size ranges..
   \label{fig:tx-diff-Prate}}
-\end{figure}
+\end{figure*}
 
 
 % \begin{figure}[t]
@@ -370,14 +382,14 @@ The higher \gls{raw} slot load ratio means more fierce condition,
 %     % new load ratio 1_8
 % \end{figure}
 
-\begin{figure}[t]
+\begin{figure*}[t]
     \centering
-    \subfloat[All data points  \label{fig:scatter_ana_tx1000}]{\includegraphics[width=0.33\textwidth]{figures/result_new_load_cov}} \\
-    \subfloat[data points with \gls{pdr} more than 80\% \label{fig:scatter_ana_tx3000}]{\includegraphics[width=0.33\textwidth]{figures/result_new_load_cov_08}}
+    \subfloat[All data points  \label{fig:tx-diff-load-all}]{\includegraphics[width=0.45\textwidth]{figures/result_new_load_cov}} 
+    \subfloat[data points with \gls{pdr} more than 80\% \label{fig:tx-diff-load-08}]{\includegraphics[width=0.45\textwidth]{figures/result_new_load_cov_08}}
   \caption{\gls{cov} as a function of \gls{raw} slot load rate for different average transmission time.
   %consisting of different coverage and packet size ranges..
   \label{fig:tx-diff-load}}
-\end{figure}
+\end{figure*}
 
 
 % \begin{figure}[t]
