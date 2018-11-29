@@ -31,7 +31,7 @@
 \end{tabular}
 \end{table}
 
-In this section, we provide an overview of the \gls{raw}, the IEEE~802.11ah network environment and its typical settings on the physical and MAC layers. 
+In this section, we provide an overview of the \gls{raw}, the IEEE~802.11ah network and its typical settings on the physical and MAC layers. 
 %A surrogate \gls{raw} model for such network scenarios is subsequently built to accurately predict the performance.
 
 
@@ -127,9 +127,14 @@ Several mathematical \gls{raw} models have been proposed to calculate  performan
 
 The above mathematical models have two main disadvantages. \todo {First of all, these models are computationally hard}. This makes it infeasible to execute them in real-time on actual \gls{ap} hardware, where at most a few milliseconds are available at the start of the beacon interval to calculate a new \gls{raw} configuration. More importantly, they assume certain types of traffic and ideal channel conditions, without communication errors, delays or capture effects. The combination of these factors make such models useful only from a theoretical point of view, to analyze the effectiveness of \gls{raw} under a variety of conditions. However, they cannot be used for real-time station grouping under dynamic and realistic traffic conditions. 
 Chang \textitet{et al.} made a step further, to support more diverse traffic demands \cite{Chang2018}. They use the results of two extreme cases (i.e., with infinite traffic and with only a single packet) to extrapolate a regression-based analytical model that can accurately fits the contention success probability of any traffic patterns. However, the regression model does not take the finite length of the RAW slot into account.
- Recently, we proposed a new RAW performance model based on supervised surrogate modeling \cite{wowmom2018}. The model is trained on a limited set of labeled data samples from ns-3 simulation results, support realistic channel conditions, including communication errors, propagation delays and capture effects. However, both of the model of Change \cite{Chang2018} and our previous work \cite{wowmom2018}, only support homogeneous networks (i.e., all stations use the same MCS and average packet size). Therefore, in this paper we present a novel training methodology for surrogate modeling of IEEE~802.11ah heterogeneous network. It uses average transmission time, i.e., the total packet transmission time of a heterogeneous network averaged over all the sent packets, as an input parameter of the surrogate model. This results in highly reduced design space, and high predication accuracy of the model remains.   
+ Recently, we proposed a new RAW performance model based on supervised surrogate modeling \cite{wowmom2018}. The model is trained on a limited set of labeled data samples from ns-3 simulation results, support realistic channel conditions, including communication errors, propagation delays and capture effects. However, both of the model of Change \cite{Chang2018} and our previous work \cite{wowmom2018}, only support homogeneous networks (i.e., all stations use the same MCS and average packet size). 
+ 
+ 
+ 
+ In this paper, we present a novel training methodology for surrogate modeling of IEEE~802.11ah heterogeneous network. It uses average transmission time, i.e., the total packet transmission time of a heterogeneous network averaged over all the sent packets, as an input parameter of the surrogate model, and packet receiving rate as the output parameter of the surrogate model. This results in highly reduced design space, allowing the model to be accurately trained with only a few labelled sample data points. 
 
-\todo{our contribution}
+
+
 % Based on the proposed \gls{raw} models, \cite{Chang2018} and \cite{wowmom2018} also developed the \gls{raw} optimization algorithms.  \cite{Chang2018} presents a traffic-aware station grouping algorithm to maximize the \gls{raw} performance. However, due to the drawbacks of the model, the algorithm assumes the number of \gls{raw} groups and \gls{raw} duration are predetermined, which is actually part of the \gls{raw} optimization problem and need to be solved.
 % In \cite{wowmom2018}, we present a real-time \gls{raw} optimization algorithm, called \gls{moroa}, supporting a wide range of traffic conditions and heterogeneous stations. However, since the model itself only support stations with same MCS and  packet sizes, the \gls{moroa} only allows same type of stations within a single \gls{raw} group. This limited the flexibility of the algorithm in finding an optimal RAW configuration.
 

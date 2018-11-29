@@ -1,6 +1,6 @@
 \section{Performance Evaluation and Discussion \label{sec:evaluation}}
 
-This section presents the evaluation results on the \gls{raw} performance predication accuracy of our surrogate model. First, the  convergence of the training process is evaluated. Subsequently, the accuracy of the surrogate model for the design space and the \textcolor{red}{extrapolated} design space are evaluated respectively. Finally, the optimal \gls{raw} configurations are discussed. As mentioned in Section \ref{subsec:para_design}, there are a number of coverage and packet size ranges that can lead to the same average transmission time. For the \textcolor{red}{limited} design space, the average transmission time is only represented by distance and packet size range used during the training process. While in the extrapolated design space, there is no such limitation.
+This section presents the evaluation results on the \gls{raw} performance predication accuracy of our surrogate model. First, the  convergence of the training process is evaluated. Subsequently, the accuracy of the surrogate model for the reduced design space and the full design space are evaluated respectively. Finally, the optimal \gls{raw} configurations are discussed. As mentioned in Section \ref{subsec:para_design}, there are a number of coverage and packet size ranges that can lead to the same average transmission time. For the reduced design space, the average transmission time is only represented by distance and packet size range used during the training process. While in the full design space, there is no such limitation.
 
 All evaluations are performed using our previously developed
 IEEE 802.11ah ns-3 module \cite{WNS32016}, and we consider the same IEEE~802.11ah scenario as described in Section \ref{subsec:80211ah_raw}. The same default PHY and MAC layer parameters are used as shown in Table \ref{tab:ns3 parameters}.
@@ -18,15 +18,16 @@ IEEE 802.11ah ns-3 module \cite{WNS32016}, and we consider the same IEEE~802.11a
 
 In this section we evaluate the training convergence of
 the surrogate model. The cross validation score is widely used to measure the accuracy of the resulting model, a low score signifies the high accuracy of the model, and vice versa. Figure~\ref{fig:sumo-iteraton} demonstrates the 10-fold cross validation score of the model as a function of the number of training samples used, each iteration uses 10 extra samples for training.  %\textcolor{red}{explains the cross validation either in this section or modeling section}.
-It clearly shows that at first, SUMO is trying to learn the behavior of the networks with cross validation score going up and down, while from 1360 samples onward, the cross validation score continually decreases until 5520 samples used for training, reaches \textcolor{red}{0.107}. Then the cross validation score remains almost constant, signifying that the training process has converged.  Training of the model stopped after 5610 samples as it satisfied the stop conditions, i.e., 10 consecutive cross-validation scores lower than or equal to $0.107$ (3 digits of precision). \textcolor{red}{This comes down to about 
-about xx(5600/425799?) of the reduced parameter space (i.e., xx), as listed in table \ref{tab:sumo parameters}, from which samples were drawn during training, and xx(5600/??) of all data points in the design space (i.e., xx), in which the step size is \textcolor{red}{1} and the results for data points outside the reduced parameter space are obtained via interpolation by the Kriging  model.}
+It clearly shows that at first, SUMO is trying to learn the behavior of the networks with cross validation score going up and down, while from 1360 samples onward, the cross validation score continually decreases until 5520 samples used for training, reaches 0.107. Then the cross validation score remains almost constant, signifying that the training process has converged.  Training of the model stopped after 5610 samples as it satisfied the stop conditions, i.e., 10 consecutive cross-validation scores lower than or equal to $0.107$ (3 digits of precision). This comes down to about 1.3\% of the parameter space (i.e., 425799) defined in table \ref{tab:sumo parameters}, from which samples were drawn during training. It is about only $1.6 \times 10^{-9}\%$ of all data points in the full design space.
+
+% and xx(5600/??) of all data points in the design space (i.e., xx), in which the step size is \textcolor{red}{1} and the results for data points outside the reduced parameter space are obtained via interpolation by the Kriging  model.
 
 
 %This comes down to about xx(5600/??) of all data points in the input space (i.e., xx), and about xx(5600/425799?) of the reduced data space (i.e., xx) from which samples were drawn during training.
 
 
 
-\subsection{Design space experiments}
+\subsection{Reduced design space experiments}
 % \begin{figure*}[t]
 %     \centering
 %     \subfloat[all \label{fig:throughput-alpha-0}]{\includegraphics[width=0.30\textwidth]{figures/all}}
@@ -175,7 +176,7 @@ points. \label{fig:regress-models}}
 %   \caption{comparison between model and simulation with * stations per slots. \label{fig:staPerSlot}}
 % \end{figure}
 
-In this section, we evaluate the \gls{raw} model accuracy for the limited design space, in which the average transmission time consists of the coverage and packet size ranges used during the training process. 
+In this section, we evaluate the \gls{raw} model accuracy for the reduced design space, in which the average transmission time consists of the coverage and packet size ranges used during the training process. 
 %As the design space includes xx data points, it is extremely expensive to run all experiments. Therefore, 
 6000 data points (called test data points) are randomly chosen for the evaluation of the model. To evaluate the accuracy of kriging model (with Matem 5/2) used in the model creation step, three additional regression models (i.e., linear regression, \gls{svm} and regression trees) are also created with the trained data points for comparison. The simulation results of the 6000 test data points are compared to the prediction of the models. 
 
@@ -249,7 +250,7 @@ In conclusion, based on the above results, we discover that, for the design spac
 % \end{enumerate}
 %}
 
-\subsection{\textcolor{red}{Extrapolated design space experiments}}
+\subsection{Full design space experiments}
 
 % \begin{figure*}[t]
 %     \centering
