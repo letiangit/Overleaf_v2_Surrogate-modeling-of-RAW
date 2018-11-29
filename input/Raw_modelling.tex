@@ -327,20 +327,18 @@ For example, the \gls{cov} is 0.001 and 0.02 for \gls{raw} slot load ratio 0.4 a
 Since the trained \gls{raw} model is mainly used for performance optimization, mainly the data points with large packet receiving rate are and high \gls{pdr} are our focus, 
 based on the results shown in Figure \ref{fig:tx-diff-Prate} and \ref{fig:tx-diff-load}, we can conclude that  average transmission time is able to represent the conditions of network. Therefore, in this paper, we use the average transmission time as a input parameter for the training.
  
- \todo{explain}
- 
- The fact that the performance variance are affected by the factors, including packet receiving rate, \gls{raw} slot ratio, \gls{pdr} and average transmission time, can be explained as follows. 
+The fact that the performance variance are affected by the factors, including packet receiving rate, \gls{raw} slot ratio, \gls{pdr} and average transmission time, can be explained as follows. 
 %  The large \gls{cov} exists for small packet receiving rate is due to the fact that a small values is more easily leads to a large variance. As the networks (i.e., data points) have different input parameters, even the networks sharing the same input parameters may have different coverage and packet size ranges, there are different saturated levels for these networks. With larger \gls{raw} slot ratio, the channel contention is more fierce, therefore, the performance of different networks are more discrepancy. Data points with higher \gls{pdr} implies that, they have proper \gls{raw} configurations that mitigate the channel contention, leading to higher saturated levels. Therefore, less performance discrepancy among different networks is obtained. 
  \begin{itemize}
  \item \textbf{Packet receiving rate} \\
  The large \gls{cov} exists for small packet receiving rate is due to the fact that a small values is more easily leads to a large variance.
- \item  \textbf{\gls{raw} slot ratio} \\
+ \item  \textbf{\gls{raw} slot load ratio} \\
  As the networks (i.e., data points) have different input parameters, even the networks sharing the same input parameters may have different coverage and packet size ranges, there are different saturated levels for these networks. With larger \gls{raw} slot ratio, the channel contention is more fierce, therefore, the performance of different networks are more discrepancy.
  \item \textbf{\gls{pdr}} \\
  Data points with higher \gls{pdr} implies that, they have proper \gls{raw} configurations that mitigate the channel contention, leading to higher saturated levels. Therefore, less performance discrepancy among different networks is obtained.
  \item \textbf{Average transmission time} \\
- For each network with average transmission time $T_x$, Figure \ref{fig:tx-std-dist} depicts its standard deviation of packet transmission time of all stations. It shows, the packet transmission time has higher variation for lager average transmission time, which is quite straightforward. As such, \todo{continue..}   
- \end{itemize}
+ For each network with average transmission time $T_x$, Figure \ref{fig:tx-std-dist} depicts its standard deviation of packet transmission time across all stations. It shows, for networks with a same and lager average transmission time, there is a higher chance that these networks have different packet transmission time distribution. Such difference can result in performance discrepancy when packet collision happens, as the airtime wasted by collision and required by re-transmission depends on the transmission time of collide packets.
+  \end{itemize}
 
 
 %  average transmission time can represent the conditions of network, which has small average transmission time, large packet receiving rate and non-overloaded traffic. In this paper, we use the average transmission time as a input parameter for the training, due to the following three reasons. First of all, the trained \gls{raw} model is mainly used for performance optimization, mainly the data points with large packet receiving rate are interesting. Second, overload traffic is not common in realistic scenarios, we only need to focus on the non-overloaded traffic scenarios. Last but not least, as mentioned in section \ref{subsec:network_para_design}, compare to parameters {${d^-}$, ${d^+}$, ${ps^-}$, ${ps+}$}, average transmission time $\hat{p_p}$ lead to an input design space with only xx data points. Therefore, there is a trade-off between the accuracy and training speed. \textcolor{red}{Tx 5000 us results in high performance discrepancy, should we mentioned the model is not suitable for Tx 5000?}. During the training, network scenarios with the same average transmission time use a fixed coverage range and packet size range. 
