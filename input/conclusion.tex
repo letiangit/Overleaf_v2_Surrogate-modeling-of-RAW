@@ -1,10 +1,26 @@
 \section{CONCLUSION AND FUTURE WORK \label{sec:conclusion}}
 
-\textbf{Next steps or things need to do now}
-\begin{enumerate}
-\item retrain the model, split the transmission time into packet size range [Ps, Pe] and distance range [Ds, De]. \\
-Quite complex to design the input for training, extrapolate the model, and  validate. Experiment design, the selection of range [s, e], and step size for both distance and packet size range. the step size. Output extrapolate (validation), for test scenarios that cross the two ranges [s, e], how to extrapolate the model and compare to simulation results?
-\item retrain the model, add the standard deviation of the transmission time into the input parameters, which distribution should the transmission time should follow? How to design the step size? \\
-\item Change the input parameters of the training. The input parameters [raw duration, slot number, station number] can be substituted by [slot duration, number of stations per slot]. \\
-\textcolor{red}{This approach is not feasible, obviously, for a fixed number of station per slot, the outputs(throughput)} varies as the other input parameters (for example, the station number) changes. as illustrated in figure \ref{fig:result-rd} and figure \ref{fig:result-range}. Apparently, the station number determines the maximal output the network can achieve, and should not be removed from the input parameters list. 
-\end{enumerate}
+In this paper, we present a new RAW performance model, based on supervised surrogate modeling, for IEEE~802.11ah heterogeneous networks, consisting of
+two contributions. First, to the best of our knowledge, we are the first to present a \gls{raw} model that can predict the packet receiving rate (i.e., number of packet received per second, equivalent to throughput) under a given \gls{raw} configuration in IEEE~802.11ah heterogeneous networks, in which stations can have different packet size and \gls{mcs} based on their distance to the \gls{ap}. Second, the training methodology is well designed to properly choose the input and output parameters of the model, allowing the model to be trained with only a very limited number of sample data points. The realistic simulation results are compared to the prediction of the built surrogate model. The results show, although the training only uses $1.6 \times 10^{-9}$ of all possible data points, for the data points that can achieve high performance in terms of packet receiving rate and packet deliver ratio,  the model can accurately predict the performance with a relative error less than 10\% for 95\% of the data points. 
+
+In future work, we aim to further extend the surrogate modeling approach to support other metrics (e.g., energy consumption) for IEEE~802.11ah heterogeneous networks, 
+
+and approximate the optimal pareto front for multiple conflicting objectives. Moreover, we will investigate real-time \gls{raw} optimization method for IEEE~802.11ah heterogeneous networks, in order to dynamically adapt the \gls{raw} configuration based on the networks conditions.   
+
+
+
+
+
+ 
+
+
+
+
+% \textbf{Next steps or things need to do now}
+% \begin{enumerate}
+% \item retrain the model, split the transmission time into packet size range [Ps, Pe] and distance range [Ds, De]. \\
+% Quite complex to design the input for training, extrapolate the model, and  validate. Experiment design, the selection of range [s, e], and step size for both distance and packet size range. the step size. Output extrapolate (validation), for test scenarios that cross the two ranges [s, e], how to extrapolate the model and compare to simulation results?
+% \item retrain the model, add the standard deviation of the transmission time into the input parameters, which distribution should the transmission time should follow? How to design the step size? \\
+% \item Change the input parameters of the training. The input parameters [raw duration, slot number, station number] can be substituted by [slot duration, number of stations per slot]. \\
+% \textcolor{red}{This approach is not feasible, obviously, for a fixed number of station per slot, the outputs(throughput)} varies as the other input parameters (for example, the station number) changes. as illustrated in figure \ref{fig:result-rd} and figure \ref{fig:result-range}. Apparently, the station number determines the maximal output the network can achieve, and should not be removed from the input parameters list. 
+% \end{enumerate}
